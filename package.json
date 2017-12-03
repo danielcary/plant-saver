@@ -1,0 +1,43 @@
+{
+  "name": "plant-saver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./server/server.js",
+  "scripts": {
+    "start": "node ./server/server.js",
+    "app-dev": "node_modules/.bin/webpack -w",
+    "app-build": "node_modules/.bin/webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielcary/plant-saver.git"
+  },
+  "author": "Daniel Cary",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danielcary/plant-saver/issues"
+  },
+  "homepage": "https://github.com/danielcary/plant-saver#readme",
+  "dependencies": {
+    "express": "^4.15.4"
+  },
+  "devDependencies": {
+    "@types/react": "^16.0.26",
+    "@types/react-bootstrap": "^0.31.8",
+    "@types/react-dom": "^16.0.3",
+    "@types/react-router-dom": "^4.2.3",
+    "awesome-typescript-loader": "^3.4.1",
+    "axios": "^0.17.1",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "react": "^16.2.0",
+    "react-bootstrap": "^0.31.5",
+    "react-dom": "^16.2.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
+    "typescript": "^2.6.2",
+    "webpack": "^3.9.1"
+  }
+}

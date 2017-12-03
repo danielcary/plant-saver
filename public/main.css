@@ -1,0 +1,39 @@
+body {
+    padding-top: 70px;
+    padding-bottom: 30px;
+  }
+  
+  .theme-dropdown .dropdown-menu {
+    position: static;
+    display: block;
+    margin-bottom: 20px;
+  }
+  
+  .theme-showcase > p > .btn {
+    margin: 5px 0;
+  }
+  
+  .theme-showcase .navbar .container {
+    width: auto;
+  }
+
+  .plantbox-remove:hover {
+    color: red;
+    cursor: pointer;
+  }
+
+  
+  .plantbox-pencil:hover {
+    color: green;
+    cursor: pointer;
+  }
+
+  .arrow {
+    margin: 0;
+    padding-top: 66px;
+  }
+
+  .arrow:hover {
+    cursor: pointer;
+    color: gray;
+  }

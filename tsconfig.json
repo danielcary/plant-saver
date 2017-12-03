@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./app/",
+        "sourceMap": false,
+        "noImplicitAny": false,
+        "module": "es2015",
+        "target": "es2015",
+        "jsx": "react",
+        "moduleResolution": "node",
+        "allowJs": true
+    },
+    "include": [
+        "./app/"
+    ]
+}
