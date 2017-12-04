@@ -11013,6 +11013,7 @@ var App = function (_React$Component) {
                 signedIn = gapi.isSignedIn();
                 if (signedIn) {
                     _axios2.default.defaults.headers['Authorization'] = 'Bearer ' + gapi.getIdToken();
+                    console.log(gapi.getIdToken());
                     settings.login().then(function (res) {
                         console.log(res);
                         _this.forceUpdate();

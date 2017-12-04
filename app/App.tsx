@@ -41,7 +41,7 @@ class App extends React.Component<{}, {}> {
 
                 if (signedIn) {
                     axios.defaults.headers['Authorization'] = `Bearer ${gapi.getIdToken()}`;
-
+                    console.log(gapi.getIdToken());
                     settings.login().then(res => {
                         console.log(res);
                         this.forceUpdate();
