@@ -2,6 +2,8 @@ const express = require('express');
 const sql = require('mssql');
 
 const auth = require('./auth');
+// routes
+const plantsRouter = require('./api/plants');
 
 const router = express.Router();
 
@@ -56,11 +58,8 @@ router.use((req, res, next) => {
     }
 });
 
-// use api routes
-router.use('/', (req, res) => {
-    console.log(req.user);
-    res.sendStatus(200)
-});
+// use routers
+app.use('/plants', plantsRouter);
 
 
 module.exports = router;
