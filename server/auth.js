@@ -52,9 +52,12 @@ module.exports = function (req, res, next) {
 
             // verify contents            
             if(jws.verify(token, key.alg, pem)) {
+
                 // set user info
                 req.user = {
-                    id: jwt.payload.sub,
+                    id: `G-${jwt.payload.sub}`,
+                    oAuthProvider: 'Google',
+                    email: jwt.payload.email,
                     name: jwt.payload.name
                 };
 
