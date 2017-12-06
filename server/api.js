@@ -4,6 +4,7 @@ const sql = require('mssql');
 const auth = require('./auth');
 // routes
 const plantsRouter = require('./api/plants');
+const userRouter = require('./api/user');
 
 const router = express.Router();
 
@@ -19,8 +20,6 @@ router.post('/signup', (req, res) => {
     // create an account for the user
     new sql.Request()
         .input('Email', sql.VarChar, req.body.email)
-        .input('Phone', sql.VarChar, req.body.phone)
-        .input('SMSNotifications', sql.Bit, req.body.smsNotifications)
         .input('LocationId', sql.Int, req.body.locationId)
         .input('UseFahrenheit', sql.Bit, req.body.useFahrenheit)
         .input('OAuthId', sql.VarChar, req.user.id)
@@ -59,6 +58,7 @@ router.use((req, res, next) => {
 });
 
 // use routers
+app.use('/user', userRouter);
 app.use('/plants', plantsRouter);
 
 
