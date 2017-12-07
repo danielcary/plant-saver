@@ -1,8 +1,9 @@
 const express = require('express');
+const joi = require('joi');
 const sql = require('mssql');
 
+const validator = require('./validator');
 const auth = require('./auth');
-// routes
 const plantsRouter = require('./api/plants');
 const userRouter = require('./api/user');
 
@@ -11,24 +12,29 @@ const router = express.Router();
 // check jwt token
 router.use(auth);
 
-// sign up
-router.post('/signup', (req, res) => {
+const signupSchema = joi.object().keys({
+    email: joi.string().email().required(),
+    latitude: joi.number().min(-90).max(90).required(),
+    longitude: joi.number().min(-180).max(180).required(),
+    timezone: joi.string().required()
+});
 
-    // validate request
-    // TODO
-
-    // create an account for the user
+// sign up the user
+router.post('/signup', validator(signupSchema), (req, res) => {
     new sql.Request()
         .input('Email', sql.VarChar, req.body.email)
-        .input('LocationId', sql.Int, req.body.locationId)
-        .input('UseFahrenheit', sql.Bit, req.body.useFahrenheit)
-        .input('OAuthId', sql.VarChar, req.user.id)
+        .input('Latitude', sql.Decimal, req.body.latitude)
+        .input('Longitude', sql.Decimal, req.body.longitude)
+        .input('Timezone', sql.VarChar, req.body.timezone)
+        .input('OAuthId', sql.NVarChar, req.user.oAuthProvider)
         .input('OAuthProvider', sql.NVarChar, req.user.oAuthProvider)
-        .query(`INSERT INTO Users (Email, Phone, SMSNotifications, LocationId, UseFahrenheit)
-                    VALUES (@Email, @Phone, @SMSNotifications, @LocationId, @UseFahrenheit); 
-                INSERT INTO UserLookup (UserId, OAuthId, OAuthProvider) 
-                    VALUES (SCOPE_IDENTITY(), @OAuthId, @OAuthProvider);`)
-        .then(() => res.sendStatus(201));
+        .query(`IF NOT EXISTS (SELECT * FROM UserLookup WHERE OAuthId=@OAuthId)
+                BEGIN
+                    INSERT INTO Users (Email, Latitude, Longitude, Timezone) VALUES (@Email, @Latitude, @Longitude, @Timezone); 
+                    INSERT INTO UserLookup (UserId, OAuthId, OAuthProvider) VALUES (SCOPE_IDENTITY(), @OAuthId, @OAuthProvider);
+                END`)
+        .then(() => res.sendStatus(201))
+        .catch(err => res.status(500).json(err));
 });
 
 // convert id from OAuth id to internal id
