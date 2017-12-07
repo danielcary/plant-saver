@@ -4,6 +4,7 @@ const path = require('path');
 
 const db = require('./db');
 const apiRouter = require('./api');
+const adminRouter = require('./admin');
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use(express.static(path.join(__dirname, "../", "public")));
 
 // route our api requests
 app.use('/api', apiRouter);
-
+app.use('/admin', adminRouter);
 
 // instead of 404, redirect to index page
 app.get('*', (req, res) => {

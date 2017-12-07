@@ -58,8 +58,8 @@ router.use((req, res, next) => {
 });
 
 // use routers
-app.use('/user', userRouter);
-app.use('/plants', plantsRouter);
+router.use('/user', userRouter);
+router.use('/plants', plantsRouter);
 
 
 module.exports = router;

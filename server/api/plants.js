@@ -4,29 +4,30 @@ const sql = require('mssql');
 const validator = require('../validator');
 
 // request validation schemas
-let addUpdateSchema = joi.object().keys({
+const addUpdateSchema = joi.object().keys({
     name: joi.string().min(1).trim().required(),
     pictureId: joi.number().min(1).max(3).required(),
     temperature: joi.number().min(-99).max(99).required()
 });
 
-let router = express.Router();
+const router = express.Router();
 
 // validate plantId param
 router.param('plantId', (req, res, next, plantId) => {
-    if (Number.isInteger(plantId) && plantId > 0) {
-        next();
-    } else {
-        res.sendStatus(400);
-    }
+    joi.validate(plantId, joi.number().integer(), err => {
+        if (err) {
+            res.status(400).json(err.details);
+        } else {
+            next();
+        }
+    });
 });
 
 // get plants
 router.get('/', (req, res) => {
     new sql.Request()
         .input('OwnerId', sql.Int, req.user.id)
-        .query(`SELECT Id AS id, Name AS name, PictureId AS pictureId, Temperature AS temperature
-                    FROM Plants WHERE OwnerId=@OwnerId`)
+        .query('SELECT Id AS id, Name AS name, PictureId AS pictureId, Temperature AS temperature FROM Plants WHERE OwnerId=@OwnerId')
         .then(results => res.json(results.recordset))
         .catch(err => res.status(500).json(err));
 });
@@ -38,8 +39,7 @@ router.post('/', validator(addUpdateSchema), (req, res) => {
         .input('Name', sql.NVarChar, req.body.name.trim())
         .input('PictureId', sql.Int, req.body.pictureId)
         .input('Temperature', sql.Decimal, req.body.temperature)
-        .query(`INSERT INTO Plants (OwnerId, Name, PictureId, Temperature)
-                    VALUES (@OwnerId, @Name, @PictureId, @Temperature);
+        .query(`INSERT INTO Plants (OwnerId, Name, PictureId, Temperature) VALUES (@OwnerId, @Name, @PictureId, @Temperature);
                 SELECT SCOPE_IDENTITY() as id;`)
         .then(results => results.json(results.recordset[0]))
         .catch(err => res.status(500).json(err));
@@ -54,7 +54,7 @@ router.put('/:plantId', validator(addUpdateSchema), (req, res) => {
         .input('PictureId', sql.Int, req.body.pictureId)
         .input('Temperature', sql.Decimal, req.body.temperature)
         .query(`UPDATE Plants SET Name=@Name, PictureId=@PictureId, Temperature=@Temperature
-                    WHERE Id=@Id AND OwnerId=@OwnerId;`)
+                WHERE Id=@Id AND OwnerId=@OwnerId;`)
         .then(() => res.sendStatus(200))
         .catch(err => res.status(500).json(err));
 });
@@ -68,5 +68,6 @@ router.delete('/:plantId', (req, res) => {
         .then(() => res.sendStatus(200))
         .catch(err => res.status(500).json(err));
 });
+
 
 module.exports = router;
