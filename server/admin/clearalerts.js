@@ -3,10 +3,10 @@ const sql = require('mssql');
 
 const router = express.Router();
 
-router.get('/:timezone', (req, res) => {
+router.get('/:utcOffset', (req, res) => {
     new sql.Request()
-        .input('Timezone', sql.VarChar, req.params.timezone)
-        .query('DELETE FROM Alerts WHERE Alerts.UserId IN (SELECT Users.Id FROM Users WHERE Users.Timezone=@Timezone)')
+    .input('UTCOffset', sql.Int, req.params.utcOffset)
+        .query('DELETE FROM Alerts WHERE Alerts.UserId IN (SELECT Users.Id FROM Users WHERE Users.UTCOffset=@UTCOffset)')
         .then(() => res.sendStatus(200))
         .catch(err => res.status(500).json(err));
 });

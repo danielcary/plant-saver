@@ -8,7 +8,7 @@ const router = express.Router();
 const DARK_SKY_KEY = '1c944117270078b9a16dd501e39816ac'; // remember to change
 sendgrid.setApiKey('KEY')
 
-router.get('/:timezone', (req, res) => {
+router.get('/:utcOffset', (req, res) => {
 
     let lowCache = {}; // indexed by [lat,lng]
     let emails = [];
@@ -16,8 +16,8 @@ router.get('/:timezone', (req, res) => {
 
     // Sget all the users with notifications enabled in the specified timezone
     let users = await new sql.Request()
-        .input('Timezone', sql.VarChar, req.params.timezone)
-        .query('SELECT Id as id, Email as email, Latitude AS lat, Longitude AS lng FROM Users WHERE Timezone=@Timezone AND NotificationsEnabled=1');
+        .input('UTCOffset', sql.Int, req.params.utcOffset)
+        .query('SELECT Id as id, Email as email, Latitude AS lat, Longitude AS lng FROM Users WHERE UTCOffset=@UTCOffset AND NotificationsEnabled=1');
 
     users.recordset.forEach(user => {
         // get all the plants for the user
@@ -50,6 +50,8 @@ router.get('/:timezone', (req, res) => {
             .input('Message', sql.NVarChar, alert.message)
             .query('INSERT INTO Alerts (UserId, Message) VALUES (@Id, @Message)')
     });
+
+    res.sendStatus(200);
 });
 
 function makeEmail(email, plants) {
