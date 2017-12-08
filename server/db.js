@@ -11,6 +11,6 @@ const config = {
     }
 };
 
-//let conn = mssql.connect(config);
+let conn = mssql.connect(config);
 
-//module.exports = conn;
+module.exports = conn;
