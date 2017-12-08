@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/danielcary/plant-saver#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.1.4",
     "axios": "^0.17.1",
     "base64-url": "^2.0.1",
     "body-parser": "^1.18.2",
