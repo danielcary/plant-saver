@@ -3,7 +3,7 @@ const jws = require('jws');
 const getPem = require('rsa-pem-from-mod-exp');
 
 const CERTS_URL = 'https://www.googleapis.com/oauth2/v3/certs';
-const MY_AUD = '893048496852-6tu0864bi761n5nke64aqbn8eft4utjj.apps.googleusercontent.com';
+const MY_AUD = process.env.GOOGLE_OAUTH_AUD;
 
 let keys = {};
 
