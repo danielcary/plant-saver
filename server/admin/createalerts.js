@@ -5,11 +5,11 @@ const sendgrid = require('@sendgrid/mail');
 
 const router = express.Router();
 
-const DARK_SKY_KEY = '1c944117270078b9a16dd501e39816ac';
+const DARK_SKY_KEY = '1c944117270078b9a16dd501e39816ac'; // remember to change
 sendgrid.setApiKey('KEY')
 
 router.get('/:timezone', (req, res) => {
-    
+
     let lowCache = {}; // indexed by [lat,lng]
     let emails = [];
     let alerts = [];
