@@ -16,21 +16,21 @@ const signupSchema = joi.object().keys({
     email: joi.string().email().required(),
     latitude: joi.number().min(-90).max(90).required(),
     longitude: joi.number().min(-180).max(180).required(),
-    timezone: joi.string().required()
+    utcOffset: joi.number().integer().min(-12).max(12).required()
 });
 
 // sign up the user
 router.post('/signup', validator(signupSchema), (req, res) => {
     new sql.Request()
-        .input('Email', sql.VarChar, req.body.email)
+        .input('Email', sql.NVarChar, req.body.email)
         .input('Latitude', sql.Decimal, req.body.latitude)
         .input('Longitude', sql.Decimal, req.body.longitude)
-        .input('Timezone', sql.VarChar, req.body.timezone)
+        .input('UTCOffset', sql.VarChar, req.body.utcOffset)
         .input('OAuthId', sql.NVarChar, req.user.oAuthProvider)
         .input('OAuthProvider', sql.NVarChar, req.user.oAuthProvider)
         .query(`IF NOT EXISTS (SELECT * FROM UserLookup WHERE OAuthId=@OAuthId)
                 BEGIN
-                    INSERT INTO Users (Email, Latitude, Longitude, Timezone) VALUES (@Email, @Latitude, @Longitude, @Timezone); 
+                    INSERT INTO Users (Email, Latitude, Longitude, UTCOffset) VALUES (@Email, @Latitude, @Longitude, @UTCOffset); 
                     INSERT INTO UserLookup (UserId, OAuthId, OAuthProvider) VALUES (SCOPE_IDENTITY(), @OAuthId, @OAuthProvider);
                 END`)
         .then(() => res.sendStatus(201))

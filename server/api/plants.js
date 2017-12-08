@@ -5,7 +5,7 @@ const validator = require('../validator');
 
 // request validation schemas
 const addUpdateSchema = joi.object().keys({
-    name: joi.string().min(1).trim().required(),
+    name: joi.string().trim().min(1).max(100).required(),
     pictureId: joi.number().min(1).max(3).required(),
     temperature: joi.number().min(-99).max(99).required()
 });
@@ -50,11 +50,10 @@ router.put('/:plantId', validator(addUpdateSchema), (req, res) => {
     new sql.Request()
         .input('Id', sql.Int, req.params.plantId)
         .input('OwnerId', sql.Int, req.user.id)
-        .input('Name', sql.NVarChar, req.body.name.trim())
+        .input('Name', sql.NVarChar, req.body.name)
         .input('PictureId', sql.Int, req.body.pictureId)
         .input('Temperature', sql.Decimal, req.body.temperature)
-        .query(`UPDATE Plants SET Name=@Name, PictureId=@PictureId, Temperature=@Temperature
-                WHERE Id=@Id AND OwnerId=@OwnerId;`)
+        .query('UPDATE Plants SET Name=@Name, PictureId=@PictureId, Temperature=@Temperature WHERE Id=@Id AND OwnerId=@OwnerId;')
         .then(() => res.sendStatus(200))
         .catch(err => res.status(500).json(err));
 });

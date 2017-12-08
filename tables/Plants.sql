@@ -1,0 +1,13 @@
+CREATE TABLE [dbo].[Plants]
+(
+	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
+    [OwnerId] INT NOT NULL, 
+    [Name] NVARCHAR(100) NOT NULL, 
+	[PictureId] INT NOT NULL,
+    [Temperature] DECIMAL(3,1) NOT NULL, 
+    [DateAdded] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
+    CONSTRAINT [FK_Plants_Users] 
+		FOREIGN KEY ([OwnerId]) 
+		REFERENCES [Users]([Id])
+		ON DELETE CASCADE
+)
