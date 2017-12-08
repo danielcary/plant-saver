@@ -11,6 +11,12 @@ const config = {
     }
 };
 
-let conn = mssql.connect(config);
-
-module.exports = conn;
+// wait for connection to database
+(async () => {
+    try {
+        await mssql.connect(config);
+    } catch (err) {
+        console.log(err);
+        process.exit(-1);
+    }
+})();

@@ -1,7 +1,7 @@
 CREATE TABLE [dbo].[UserLookup]
 (
 	[UserId] INT NOT NULL,
-	[OAuthId] VARCHAR(MAX) NOT NULL,
+	[OAuthId] VARCHAR(200) NOT NULL,
 	[OAuthProvider] NVARCHAR(MAX) NOT NULL,
 	[DateAdded] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     CONSTRAINT [FK_UserLookup_Users] 
