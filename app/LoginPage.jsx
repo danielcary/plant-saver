@@ -1,12 +1,8 @@
 import * as React from 'react';
 import { Panel, Grid, FormControl, FormGroup, ControlLabel, Button } from 'react-bootstrap';
 
-interface ILoginPageState {
-    email: string;
-    password: string;
-}
 
-export default class LoginPage extends React.Component<{}, ILoginPageState> {
+export default class LoginPage extends React.Component {
 
     constructor(props) {
         super(props);

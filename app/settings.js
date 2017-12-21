@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+/*
 export interface ISettings {
     email: string;
     notificationsEnabled: boolean;
@@ -8,11 +9,12 @@ export interface ISettings {
     longitude: number;
     utcOffset: number;
 };
+*/
 
-let settings: ISettings = null;
+let settings = null;
 
 export function login() {
-    return new Promise<ISettings>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         axios.get('/user')
             .then(res => settings = res.data)
             .then(() => resolve(settings))
@@ -28,8 +30,8 @@ export function clear() {
     settings = null;
 }
 
-export function updateSettings(email: string, notificationsEnabled: boolean, useFahrenheit: boolean) {
-    return new Promise<ISettings>((resolve, reject) => {
+export function updateSettings(email, notificationsEnabled, useFahrenheit) {
+    return new Promise((resolve, reject) => {
         axios.put('/user/settings', {
             email: email,
             notificationsEnabled: notificationsEnabled,
@@ -45,8 +47,8 @@ export function updateSettings(email: string, notificationsEnabled: boolean, use
     });
 };
 
-export function updateLocation(latitude: number, longitude: number, utcOffset: number) {
-    return new Promise<ISettings>((resolve, reject) => {
+export function updateLocation(latitude, longitude, utcOffset) {
+    return new Promise((resolve, reject) => {
         axios.put('/user/location', {
             latitude: latitude,
             longitude: longitude,

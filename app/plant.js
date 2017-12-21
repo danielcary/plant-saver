@@ -1,16 +1,15 @@
 import axios from 'axios';
 
-export interface IPlant {
+/* {
     id: number;
     name: string;
     temperature: number;
     pictureId: number;
-}
-
-let plants: IPlant[] = [];
+} */
+let plants = [];
 
 export function loadPlants() {
-    return new Promise<IPlant[]>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         axios.get('/plants').then(res => {
             if (!res.data.success) {
                 reject(res);
@@ -24,12 +23,12 @@ export function loadPlants() {
     });
 }
 
-export function getPlants(): IPlant[] {
+export function getPlants() {
     return plants;
 }
 
-export function editPlant(id: number, name: string, alertTempF: number, pictureId: number) {
-    return new Promise<IPlant[]>((resolve, reject) => {
+export function editPlant(id, name, alertTempF, pictureId) {
+    return new Promise((resolve, reject) => {
         axios.put(`/plants/${id}`, {
             name: name,
             pictureId: pictureId,
@@ -51,8 +50,8 @@ export function editPlant(id: number, name: string, alertTempF: number, pictureI
     });
 }
 
-export function addPlant(name: string, alertTempF: number, pictureId: number) {
-    return new Promise<IPlant[]>((resolve, reject) => {
+export function addPlant(name, alertTempF, pictureId) {
+    return new Promise((resolve, reject) => {
         axios.post('/plants', {
             name: name,
             pictureId: pictureId,
@@ -68,8 +67,8 @@ export function addPlant(name: string, alertTempF: number, pictureId: number) {
     });
 }
 
-export function removePlant(id: number) {
-    return new Promise<IPlant[]>((resolve, reject) => {
+export function removePlant(id) {
+    return new Promise((resolve, reject) => {
         axios.delete(`/plants/${id}`).then(res => {
             if (!res.data.success) {
                 reject(res);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Modal, Row, Col, Button, Glyphicon, ControlLabel, FormGroup, InputGroup, FormControl } from 'react-bootstrap';
 
 import { plantPicUrls } from './plant';
-
+/*
 export interface IAddModifyPlantModelProps {
     title: string;
     fahrenheit: boolean;
@@ -19,11 +19,11 @@ interface IAddModifyPlantModalState {
     plantName: string;
     alertTemperature: number;
     errorMessage: string;
-}
+}*/
 
-export default class AddModifyPlantModal extends React.Component<IAddModifyPlantModelProps, IAddModifyPlantModalState> {
+export default class AddModifyPlantModal extends React.Component {
 
-    constructor(props: IAddModifyPlantModelProps) {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -50,7 +50,7 @@ export default class AddModifyPlantModal extends React.Component<IAddModifyPlant
         });
     }
 
-    arrowOver(right: boolean) {
+    arrowOver(right) {
 
         let index = this.state.currentPictureIndex;
         index += right ? 1 : -1;

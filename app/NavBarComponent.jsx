@@ -4,13 +4,9 @@ import { Link, match, RouteComponentProps } from 'react-router-dom';
 
 import * as gapi from './gapi';
 
-export interface INavBarComponentProps extends RouteComponentProps<any> {
-    loggedIn?: boolean;
-}
+export default class NavBarComponent extends React.Component {
 
-export default class NavBarComponent extends React.Component<INavBarComponentProps, {}> {
-
-    constructor(props: INavBarComponentProps) {
+    constructor(props) {
         super(props);
 
         this.getActive = this.getActive.bind(this);

@@ -4,14 +4,7 @@ import { Grid, Alert, FormGroup, FormControl, ControlLabel, InputGroup, Button, 
 import * as settings from './settings';
 import { ISettings } from './settings';
 
-interface ISettingsState {
-    loading: boolean;
-    email: string;
-    notificationsEnabled: boolean;
-    useFahrenheit: boolean;
-}
-
-export default class SettingsPage extends React.Component<{}, ISettingsState> {
+export default class SettingsPage extends React.Component {
 
     constructor(props) {
         super(props);

@@ -17,7 +17,7 @@ axios.defaults.baseURL = '/api';
 
 let oAuthSignedIn = false;
 
-class App extends React.Component<{}, {}> {
+class App extends React.Component {
 
     constructor(props) {
         super(props);

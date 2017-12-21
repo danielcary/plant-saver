@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Panel, Glyphicon, Grid, Row, Col, Image } from 'react-bootstrap';
 
+/*
 export interface IPlantBoxProps {
     plantId: number;
     imageUrl: string;
@@ -12,8 +13,9 @@ export interface IPlantBoxProps {
     onEdit: (id) => void;
     onRemove: () => void;
 };
+*/
 
-export default class PlantBox extends React.Component<IPlantBoxProps, {}> {
+export default class PlantBox extends React.Component {
 
     removeClicked() {
         if(confirm(`Are you sure you want to delete '${this.props.name}'?`)) {

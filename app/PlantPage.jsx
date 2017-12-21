@@ -6,16 +6,15 @@ import PlantBox from './PlantBox';
 import AddModifyPlantModal from './AddModifyPlantModal';
 
 import * as Plant from './plant';
-import { IPlant } from './plant';
-
+/*
 interface IPlantPageState {
     showAddPlantModal: boolean;
     editingPlant: IPlant;
     plants: IPlant[];
     loading: boolean;
-}
+}*/
 
-export default class PlantPage extends React.Component<{}, IPlantPageState> {
+export default class PlantPage extends React.Component {
 
     constructor(props) {
         super(props);
@@ -41,7 +40,7 @@ export default class PlantPage extends React.Component<{}, IPlantPageState> {
     }
 
     renderBoxes() {
-        let boxes: JSX.Element[] = [];
+        let boxes = [];
 
         this.state.plants.forEach(plant => {
             boxes.push(
@@ -58,10 +57,10 @@ export default class PlantPage extends React.Component<{}, IPlantPageState> {
             );
         });
 
-        let renderComps: JSX.Element[] = [];
+        let renderComps = [];
         const perRow = 3;
         for (let i = 0; i < Math.ceil(boxes.length / perRow); i++) {
-            let cols: JSX.Element[] = [];
+            let cols = [];
 
             for (let j = i * perRow; j < i * perRow + perRow; j++) {
                 cols.push(
@@ -77,7 +76,7 @@ export default class PlantPage extends React.Component<{}, IPlantPageState> {
         return <div>{renderComps.map(e => e)}</div>;
     }
 
-    addPlant(picIndex: number, name: string, temp: number) {
+    addPlant(picIndex, name, temp) {
         Plant.addPlant(name, temp, picIndex).then(res => {
             this.setState({
                 plants: res,
@@ -88,7 +87,7 @@ export default class PlantPage extends React.Component<{}, IPlantPageState> {
         this.setState({ showAddPlantModal: false, loading: true })
     }
 
-    savePlant(picIndex: number, name: string, temp: number) {
+    savePlant(picIndex, name, temp) {
         Plant.editPlant(this.state.editingPlant.id, name, temp, picIndex).then(res => {
             this.setState({
                 plants: res,
@@ -99,7 +98,7 @@ export default class PlantPage extends React.Component<{}, IPlantPageState> {
         this.setState({ editingPlant: null, loading: true })
     }
 
-    removePlant(id: number) {
+    removePlant(id) {
         Plant.removePlant(id).then(res => {
             this.setState({
                 plants: res,
