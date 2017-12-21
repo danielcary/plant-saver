@@ -1,16 +1,14 @@
 import * as React from 'react';
-import { Grid, Alert, FormGroup, FormControl, ControlLabel, InputGroup, Button, Radio } from 'react-bootstrap';
+import { Grid, Alert, FormGroup, FormControl, ControlLabel, InputGroup, Button, Radio, Checkbox } from 'react-bootstrap';
 
 import * as settings from './settings';
 import { ISettings } from './settings';
 
 interface ISettingsState {
-    location: string;
+    loading: boolean;
     email: string;
-    phone: string;
-    useEmail: boolean;
-    useFahrenheit: boolean;
     notificationsEnabled: boolean;
+    useFahrenheit: boolean;
 }
 
 export default class SettingsPage extends React.Component<{}, ISettingsState> {
@@ -19,103 +17,69 @@ export default class SettingsPage extends React.Component<{}, ISettingsState> {
         super(props);
 
         this.state = {
-            location: '',
-            email: '',
-            phone: '',
-            useEmail: true,
-            useFahrenheit: true,
-            notificationsEnabled: true
+            loading: false,
+            email: settings.get().email,
+            useFahrenheit: settings.get().useFahrenheit,
+            notificationsEnabled: settings.get().notificationsEnabled
         };
 
-        /*   Settings.get().then(settings => {
-               this.setState({
-                   location: settings.location,
-                   email: settings.email,
-                   phone: settings.phoneNumber,
-                   useFahrenheit: settings.useFahrenheit,
-                   useEmail: settings.useEmailNotifications,
-                   notificationsEnabled: settings.areNotificationsPaused
-               });
-           });
-   */
-    }
-
-    locationChanged(e) {
-        this.setState({ location: e.target.value });
     }
 
     emailChanged(e) {
         this.setState({ email: e.target.value });
     }
 
-    phoneChanged(e) {
-        this.setState({ phone: e.target.value });
+    notificationsEnabledChanged() {
+        this.setState({ notificationsEnabled: !this.state.notificationsEnabled });
     }
 
-    canSave() {
-        return false;
+    useFahrenheitChanged() {
+        this.setState({ useFahrenheit: !this.state.useFahrenheit });
     }
 
-    notificationTypeChanged(email: boolean) {
-        this.setState({ useEmail: email })
+    save() {
+        this.setState({ loading: true });
+        settings.updateSettings(this.state.email, this.state.notificationsEnabled, this.state.useFahrenheit).then(() => {
+            this.setState({ loading: false });
+        }).catch(err => {
+            alert('Error saving settings!');
+            this.setState({ loading: false });
+        })
     }
 
     render() {
         return (
             <Grid>
-                {(settings.get().locationId == null &&
-                    <Alert bsStyle="warning">
-                        Please enter your location in order to track weather!
-                    </Alert>
-                )}
                 <FormGroup>
-                    <ControlLabel>Location</ControlLabel>
-                    <FormControl type="text" value={this.state.location} onChange={e => this.locationChanged(e)} />
-                </FormGroup>
-
-                <ControlLabel>Notification Settings</ControlLabel>
-                <FormGroup>
-                    <InputGroup>
-                        <InputGroup.Addon>
-                            <input type="radio" checked={this.state.useEmail} onChange={() => this.notificationTypeChanged(true)} name="notificationradiogroup" />
-                        </InputGroup.Addon>
-                        <FormControl
-                            type="text"
-                            placeholder="you@example.com"
-                            value={this.state.email}
-                            onChange={e => this.emailChanged(e)}
-                        />
-                    </InputGroup>
-                </FormGroup>
-
-                <FormGroup>
-                    <InputGroup>
-                        <InputGroup.Addon>
-                            <input type="radio" checked={!this.state.useEmail} onChange={() => this.notificationTypeChanged(false)} name="notificationradiogroup" />
-                        </InputGroup.Addon>
-                        <FormControl
-                            type="text"
-                            placeholder="(123)-134-2445"
-                            value={this.state.phone}
-                            onChange={e => this.phoneChanged(e)}
-                        />
-                    </InputGroup>
+                    <ControlLabel>Notification Settings</ControlLabel>
+                    <FormControl
+                        type="text"
+                        placeholder="you@example.com"
+                        value={this.state.email}
+                        onChange={e => this.emailChanged(e)}
+                    />
+                    <Checkbox
+                        checked={this.state.notificationsEnabled}
+                        onChange={() => this.notificationsEnabledChanged()}>
+                        Send Notifications
+                    </Checkbox>
                 </FormGroup>
 
                 <FormGroup>
                     <ControlLabel>Temperature Scale</ControlLabel><br />
-                    <Button onClick={() => this.setState({ useFahrenheit: !this.state.useFahrenheit })} >{this.state.useFahrenheit ? "°F" : "°C"}</Button>
+                    <Button
+                        onClick={() => this.useFahrenheitChanged()}>
+                        {this.state.useFahrenheit ? "°F" : "°C"}
+                    </Button>
                 </FormGroup>
 
                 <div style={{ textAlign: "right" }}>
-                    <Button disabled={!this.canSave()}>
+                    <Button
+                        onClick={() => this.save()}
+                        disabled={this.state.loading}>
                         Save
                     </Button>
                 </div>
-
-                <Button>
-                    Pause Alarm
-                </Button>
             </Grid>
         );
     }

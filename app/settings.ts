@@ -1,36 +1,22 @@
 import axios from 'axios';
 
 export interface ISettings {
-    locationId: number;
-    locationAddress: string;
     email: string;
-    phone: string;
     notificationsEnabled: boolean;
-    // useEmailNotifications: boolean;
-    // useFahrenheit: boolean;
+    useFahrenheit: boolean;
+    latitude: number;
+    longitude: number;
+    utcOffset: number;
 };
 
-let settings: ISettings = {
-    email: null,
-    locationAddress: null,
-    locationId: null,
-    notificationsEnabled: null,
-    phone: null
-};
+let settings: ISettings = null;
 
 export function login() {
     return new Promise<ISettings>((resolve, reject) => {
-        axios.get('/user').then(res => {
-            if (!res.data.success) {
-                reject(res);
-            }
-            
-            settings = res.data;
-
-            resolve(settings);
-        }).catch(err => {
-            reject(err);
-        })
+        axios.get('/user')
+            .then(res => settings = res.data)
+            .then(() => resolve(settings))
+            .catch(err => reject(err))
     });
 }
 
@@ -38,26 +24,50 @@ export function get() {
     return settings;
 };
 
-export function save(location: string, email: string, phoneNumber: string, useEmailNt: boolean, useFahrenheit: boolean) {
-    return new Promise<ISettings>((resolve, reject) => {
+export function clear() {
+    settings = null;
+}
 
-    /*    settings.location = location;
-        settings.email = email;
-        settings.phoneNumber = phoneNumber;
-        settings.useEmailNotifications = useEmailNt;
-        settings.useFahrenheit = useFahrenheit;
-*/
-        resolve(settings);
+export function updateSettings(email: string, notificationsEnabled: boolean, useFahrenheit: boolean) {
+    return new Promise<ISettings>((resolve, reject) => {
+        axios.put('/user/settings', {
+            email: email,
+            notificationsEnabled: notificationsEnabled,
+            useFahrenheit: useFahrenheit
+        }).then(res => {
+            // update locally 
+            settings.email = email;
+            settings.notificationsEnabled = notificationsEnabled;
+            settings.useFahrenheit = useFahrenheit;
+
+            resolve(settings);
+        }).catch(err => reject(err));
     });
 };
 
-export function toggleNotifications() {
+export function updateLocation(latitude: number, longitude: number, utcOffset: number) {
     return new Promise<ISettings>((resolve, reject) => {
+        axios.put('/user/location', {
+            latitude: latitude,
+            longitude: longitude,
+            utcOffset: utcOffset
+        }).then(res => {
+            // update locally
+            settings.latitude = latitude;
+            settings.longitude = longitude;
+            settings.utcOffset = utcOffset;
 
-      //  settings.areNotificationsPaused = !settings.areNotificationsPaused;
-
-        resolve(settings);
+            resolve(settings);
+        }).catch(err => reject(err));
     });
-};
+}
 
-
+export function deleteAccount() {
+    return new Promise((resolve, reject) => {
+        axios.delete('/user')
+            .then(res => {
+                settings = null;
+                resolve();
+            }).catch(err => reject(err));
+    });
+}

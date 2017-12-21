@@ -46,12 +46,24 @@ export default class NavBarComponent extends React.Component<INavBarComponentPro
     renderLoggedOutNav() {
         return (
             <Navbar.Collapse>
-                <Nav>
-                    <li className={this.getActive("login")}><Link to="/login">Login</Link></li>
-                </Nav>
+                {this.props.location.pathname.endsWith("login") &&
+                    <Nav>
+                        <li className={this.getActive("login")}><Link to="/login">Login</Link></li>
+                    </Nav>
+                }
+                {this.props.location.pathname.endsWith("signup") &&
+                    <Nav>
+                        <li className={this.getActive("signup")}><Link to="/signup">Signup</Link></li>
+                    </Nav>
+                }
                 <Nav>
                     <li className={this.getActive("about")}><Link to="/about">About</Link></li>
                 </Nav>
+                {this.props.location.pathname.endsWith("signup") &&
+                    <Nav>
+                        <li><a onClick={() => gapi.signOut()}>Switch Google Accounts</a></li>
+                    </Nav>
+                }
             </Navbar.Collapse>
         );
     }

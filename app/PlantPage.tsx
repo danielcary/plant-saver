@@ -8,14 +8,14 @@ import AddModifyPlantModal from './AddModifyPlantModal';
 import * as Plant from './plant';
 import { IPlant } from './plant';
 
-interface IMainPageState {
+interface IPlantPageState {
     showAddPlantModal: boolean;
     editingPlant: IPlant;
     plants: IPlant[];
     loading: boolean;
 }
 
-export default class MainPage extends React.Component<{}, IMainPageState> {
+export default class PlantPage extends React.Component<{}, IPlantPageState> {
 
     constructor(props) {
         super(props);
