@@ -37,6 +37,7 @@ export default class MapComponent extends React.Component {
     }
 
     mapClicked(e) {
+        console.log(e);
         this.setState({
             lat: e.latLng.lat(),
             lng: e.latLng.lng()
