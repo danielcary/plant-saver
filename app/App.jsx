@@ -1,8 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
-import axios from 'axios';
-
+import { setAuth } from './axios';
 import NavBarComponent from './NavBarComponent';
 import PlantPage from './PlantPage';
 import SettingsPage from './SettingsPage';
@@ -11,9 +10,6 @@ import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
 import * as gapi from './gapi';
 import * as settings from './settings';
-
-
-axios.defaults.baseURL = '/api';
 
 let oAuthSignedIn = false;
 
@@ -29,7 +25,7 @@ class App extends React.Component {
                 oAuthSignedIn = gapi.isSignedIn()
 
                 if (oAuthSignedIn) {
-                    axios.defaults.headers['Authorization'] = `Bearer ${gapi.getIdToken()}`;
+                    setAuth(`Bearer ${gapi.getIdToken()}`)
 
                     settings.login().then(res => {
                         console.log(res);
@@ -63,7 +59,16 @@ class App extends React.Component {
         } else if (oAuthSignedIn) {
             return (
                 <Switch>
-                    <Route path="/signup" exact component={SignupPage} />
+                    <Route path="/signup" exact render={props => <SignupPage signedUp={() => {
+                        settings.login()
+                            .then(res => console.log(res))
+                            .catch(err => {
+                                if (err.response.status != 401) {
+                                    alert('Error logging in!');
+                                }
+                                console.log(err);
+                            }).then(() => this.forceUpdate());
+                    }} />} />
                     <Route path="/about" exact component={AboutPage} />
                     <Redirect to="/signup" />
                 </Switch>

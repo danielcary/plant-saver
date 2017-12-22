@@ -26,7 +26,7 @@ function getKey(kid) {
 module.exports = function (req, res, next) {
     let authHeader = req.header('Authorization');
     if (authHeader == null || !authHeader.startsWith('Bearer')) {
-        res.sendStatus(401);
+        res.status(401).send('Missing JWT')
     } else {
         // decode token
         let token = authHeader.substring('Bearer '.length);
@@ -36,12 +36,12 @@ module.exports = function (req, res, next) {
 
         // verify payload claims
         if (jwt.payload.aud != MY_AUD) {
-            res.sendStatus(401);
+            res.status(401).send('Bad JWT')
             return;
         }
 
         if (jwt.payload.iss != 'accounts.google.com' && jwt.payload.iss != 'https://accounts.google.com') {
-            res.sendStatus(401);
+            res.status(401).send('Bad JWT')
             return;
         }
 
@@ -63,7 +63,7 @@ module.exports = function (req, res, next) {
 
                 next();
             } else {
-                res.sendStatus(401);
+                res.status(401).send('Bad JWT');
             }
         }).catch(err => {
             console.log(err);

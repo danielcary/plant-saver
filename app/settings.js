@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axios';
 
 /*
 export interface ISettings {
@@ -15,7 +15,7 @@ let settings = null;
 
 export function login() {
     return new Promise((resolve, reject) => {
-        axios.get('/user')
+        axios().get('/user')
             .then(res => settings = res.data)
             .then(() => resolve(settings))
             .catch(err => reject(err))
@@ -32,7 +32,7 @@ export function clear() {
 
 export function updateSettings(email, notificationsEnabled, useFahrenheit) {
     return new Promise((resolve, reject) => {
-        axios.put('/user/settings', {
+        axios().put('/user/settings', {
             email: email,
             notificationsEnabled: notificationsEnabled,
             useFahrenheit: useFahrenheit
@@ -49,7 +49,7 @@ export function updateSettings(email, notificationsEnabled, useFahrenheit) {
 
 export function updateLocation(latitude, longitude, utcOffset) {
     return new Promise((resolve, reject) => {
-        axios.put('/user/location', {
+        axios().put('/user/location', {
             latitude: latitude,
             longitude: longitude,
             utcOffset: utcOffset
@@ -66,7 +66,7 @@ export function updateLocation(latitude, longitude, utcOffset) {
 
 export function deleteAccount() {
     return new Promise((resolve, reject) => {
-        axios.delete('/user')
+        axios().delete('/user')
             .then(res => {
                 settings = null;
                 resolve();

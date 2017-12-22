@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axios';
 
 /* {
     id: number;
@@ -11,11 +11,7 @@ let plants = [];
 export function loadPlants() {
     return new Promise((resolve, reject) => {
         axios.get('/plants').then(res => {
-            if (!res.data.success) {
-                reject(res);
-            }
-
-            plants = res.data.plants;
+            plants = res.data;
             console.log(plants);
 
             resolve(plants);
@@ -27,21 +23,37 @@ export function getPlants() {
     return plants;
 }
 
-export function editPlant(id, name, alertTempF, pictureId) {
+export function addPlant(name, pictureId, temperature) {
+    return new Promise((resolve, reject) => {
+        axios.post('/plants', {
+            name: name,
+            pictureId: pictureId,
+            temperature: temperature
+        }).then(res => {
+            plants.push({
+                id: res.data.id,
+                name: name,
+                pictureId: pictureId,
+                temperature: temperature
+            });
+            resolve(plants);
+        }).catch(err => reject(err));
+    });
+}
+
+export function editPlant(id, name, pictureId, temperature) {
     return new Promise((resolve, reject) => {
         axios.put(`/plants/${id}`, {
             name: name,
             pictureId: pictureId,
-            temperature: alertTempF
+            temperature: temperature
         }).then(res => {
-            if(!res.data.success) {
-                reject(res);
-            }
-
             // update local list
             for (let i = 0; i < plants.length; i++) {
                 if (plants[i].id == id) {
-                    plants[i] = res.data.plant;
+                    plants[i].name = name;
+                    plants[i].pictureId = pictureId;
+                    plants[i].temperature = temperature;
                     break;
                 }
             }
@@ -49,37 +61,13 @@ export function editPlant(id, name, alertTempF, pictureId) {
         }).catch(err => reject(err));
     });
 }
-
-export function addPlant(name, alertTempF, pictureId) {
-    return new Promise((resolve, reject) => {
-        axios.post('/plants', {
-            name: name,
-            pictureId: pictureId,
-            temperature: alertTempF
-        }).then(res => {
-            if (!res.data.success) {
-                reject(res);
-            }
-
-            plants.push(res.data.plant);
-            resolve(plants);
-        }).catch(err => reject(err));
-    });
-}
-
 export function removePlant(id) {
     return new Promise((resolve, reject) => {
         axios.delete(`/plants/${id}`).then(res => {
-            if (!res.data.success) {
-                reject(res);
-            }
+            // update local list
+            plants = plants.filter(plant => plant.id != id);
+            resolve(plants);
         }).catch(err => reject(err));
-
-        // update local list
-        plants = plants.filter(plant => {
-            return plant.id != id
-        });
-        resolve(plants);
     });
 }
 

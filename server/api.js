@@ -26,7 +26,7 @@ router.post('/signup', validator(signupSchema), (req, res) => {
         .input('Latitude', sql.Decimal, req.body.latitude)
         .input('Longitude', sql.Decimal, req.body.longitude)
         .input('UTCOffset', sql.VarChar, req.body.utcOffset)
-        .input('OAuthId', sql.NVarChar, req.user.oAuthProvider)
+        .input('OAuthId', sql.NVarChar, req.user.id)
         .input('OAuthProvider', sql.NVarChar, req.user.oAuthProvider)
         .query(`IF NOT EXISTS (SELECT * FROM UserLookup WHERE OAuthId=@OAuthId)
                 BEGIN
@@ -57,7 +57,7 @@ router.use((req, res, next) => {
                     req.user.id = id;
                     next();
                 } else {
-                    res.sendStatus(401);
+                    res.status(401).send('No User');
                 }
             }).catch(err => next(err));
     }

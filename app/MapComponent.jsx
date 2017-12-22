@@ -2,25 +2,34 @@ import * as React from 'react';
 import { Panel, Grid, Col, FormControl, Form, FormGroup, ControlLabel, Button } from 'react-bootstrap';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 
-const defaultLat = 41;
-const defaultLng = -80;
+const START_LAT = 41;
+const START_LNG = -80;
 
 export default class MapComponent extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            lat: defaultLat,
-            lng: defaultLng
+        let defaultLat = this.props.lat || START_LAT;
+        let defaultLng = this.props.lng || START_LNG;
+
+        if(!this.props.lat && !this.props.lng) {
+            this.props.setCoords(START_LAT, START_LNG);
         }
 
+        this.state = {
+            lat: defaultLat,
+            lng: defaultLng,
+            center: { lat: defaultLat, lng: defaultLng }
+        };
+
         // get location automatically (if we can)
-        if(navigator.geolocation) {
+        if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(pos => {
                 this.setState({
                     lat: pos.coords.latitude,
-                    lng: pos.coords.longitude
+                    lng: pos.coords.longitude,
+                    center: { lat: pos.coords.latitude, lng: pos.coords.longitude }
                 });
             });
         }
@@ -29,6 +38,7 @@ export default class MapComponent extends React.Component {
             <GoogleMap
                 defaultZoom={5}
                 defaultCenter={{ lat: defaultLat, lng: defaultLng }}
+                center={this.state.center}
                 onClick={e => this.mapClicked(e)}
             >
                 <Marker position={{ lat: this.state.lat, lng: this.state.lng }} />
@@ -37,21 +47,18 @@ export default class MapComponent extends React.Component {
     }
 
     mapClicked(e) {
-        console.log(e);
         this.setState({
             lat: e.latLng.lat(),
             lng: e.latLng.lng()
+        }, () => {
+            this.props.setCoords(this.state.lat, this.state.lng);
         });
-
-        if(this.props.setCoords) {
-            this.props.setCoords(this.state);
-        }
     }
 
     render() {
         return (
             <this.MyMap
-                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing"
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `400px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}

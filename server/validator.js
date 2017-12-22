@@ -2,7 +2,7 @@ const joi = require('joi');
 
 module.exports = function (bodySchema) {
     return (req, res, next) => {
-        joi.validate(req.body, schema, (err, val) => {
+        joi.validate(req.body, bodySchema, (err, val) => {
             if (!err) {
                 req.body = val;
                 next()
