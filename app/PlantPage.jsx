@@ -77,42 +77,53 @@ export default class PlantPage extends React.Component {
     }
 
     addPlant(picIndex, name, temp) {
-        Plant.addPlant(name, temp, picIndex).then(res => {
-            this.setState({
-                plants: res,
-                loading: false
+        this.setState({ showAddPlantModal: false, loading: true }, () => {
+            Plant.addPlant(name, picIndex, temp).then(res => {
+                this.setState({
+                    plants: res,
+                    loading: false
+                });
+            }).catch(err => {
+                console.log(err);
+                alert('Error adding plant!');
+                this.setState({ loading: false });
             });
-        }).catch(err => console.log(err));
-
-        this.setState({ showAddPlantModal: false, loading: true })
+        });
     }
 
-    savePlant(picIndex, name, temp) {
-        Plant.editPlant(this.state.editingPlant.id, name, temp, picIndex).then(res => {
-            this.setState({
-                plants: res,
-                loading: false
+    savePlant(id, picIndex, name, temp) {
+        this.setState({ editingPlant: null, loading: true }, () => {
+            Plant.editPlant(id, name, picIndex, temp).then(res => {
+                this.setState({
+                    plants: res,
+                    loading: false
+                });
+            }).catch(err => {
+                console.log(err);
+                alert('Error editing plant!');
+                this.setState({ loading: false });
             });
-        }).catch(err => console.log(err));
-
-        this.setState({ editingPlant: null, loading: true })
+        });
     }
 
     removePlant(id) {
-        Plant.removePlant(id).then(res => {
-            this.setState({
-                plants: res,
-                loading: false
+        this.setState({ loading: true }, () => {
+            Plant.removePlant(id).then(res => {
+                this.setState({
+                    plants: res,
+                    loading: false
+                });
+            }).catch(err => {
+                console.log(err);
+                alert('Error removing plant!');
+                this.state({ loading: false });
             });
-        }).catch(err => console.log(err));
-
-        this.setState({ loading: true });
+        });
     }
 
     render() {
         return (
             <Grid>
-                {(this.state.loading && <h1>loading</h1>)}
                 {this.state.showAddPlantModal && <AddModifyPlantModal
                     onHide={() => this.setState({ showAddPlantModal: false })}
                     onSave={this.addPlant}
@@ -120,6 +131,7 @@ export default class PlantPage extends React.Component {
                 {this.state.editingPlant && <AddModifyPlantModal
                     onHide={() => this.setState({ editingPlant: null })}
                     onSave={this.savePlant}
+                    id={this.state.editingPlant.id}
                     plantName={this.state.editingPlant.name}
                     alertTemperature={this.state.editingPlant.temperature}
                     currentPictureIndex={this.state.editingPlant.pictureId}
@@ -127,8 +139,9 @@ export default class PlantPage extends React.Component {
                 <PageHeader>
                     Your Plants <Glyphicon onClick={() => this.setState({ showAddPlantModal: true })} glyph="plus" />
                 </PageHeader>
+                {this.state.loading && <div style={{ marginTop: 100 }} className="loader"></div>}
 
-                {this.renderBoxes()}
+                {!this.state.loading && this.renderBoxes()}
 
             </Grid>
         );

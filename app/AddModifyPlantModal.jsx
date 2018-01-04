@@ -73,6 +73,7 @@ export default class AddModifyPlantModal extends React.Component {
 
     save() {
         this.props.onSave(
+            this.props.id,
             this.state.currentPictureIndex,
             this.state.plantName,
             this.state.alertTemperature

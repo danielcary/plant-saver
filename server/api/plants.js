@@ -36,12 +36,11 @@ router.get('/', (req, res) => {
 router.post('/', validator(addUpdateSchema), (req, res) => {
     new sql.Request()
         .input('OwnerId', sql.Int, req.user.id)
-        .input('Name', sql.NVarChar, req.body.name.trim())
+        .input('Name', sql.NVarChar, req.body.name)
         .input('PictureId', sql.Int, req.body.pictureId)
         .input('Temperature', sql.Decimal, req.body.temperature)
-        .query(`INSERT INTO Plants (OwnerId, Name, PictureId, Temperature) VALUES (@OwnerId, @Name, @PictureId, @Temperature);
-                SELECT SCOPE_IDENTITY() as id;`)
-        .then(results => results.json(results.recordset[0]))
+        .query(`INSERT INTO Plants (OwnerId, Name, PictureId, Temperature) VALUES (@OwnerId, @Name, @PictureId, @Temperature); SELECT SCOPE_IDENTITY() as id;`)
+        .then(results => res.json(results.recordset[0]))
         .catch(err => res.status(500).json(err));
 });
 

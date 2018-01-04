@@ -1,21 +1,13 @@
-import axios from './axios';
+import myAxios from './axios';
+import * as settings from './settings';
 
-/* {
-    id: number;
-    name: string;
-    temperature: number;
-    pictureId: number;
-} */
 let plants = [];
 
 export function loadPlants() {
     return new Promise((resolve, reject) => {
-        axios.get('/plants').then(res => {
-            plants = res.data;
-            console.log(plants);
-
-            resolve(plants);
-        }).catch(err => reject(err));
+        myAxios().get('/plants')
+            .then(res => resolve(plants = res.data))
+            .catch(err => reject(err));
     });
 }
 
@@ -25,7 +17,7 @@ export function getPlants() {
 
 export function addPlant(name, pictureId, temperature) {
     return new Promise((resolve, reject) => {
-        axios.post('/plants', {
+        myAxios().post('/plants', {
             name: name,
             pictureId: pictureId,
             temperature: temperature
@@ -43,7 +35,7 @@ export function addPlant(name, pictureId, temperature) {
 
 export function editPlant(id, name, pictureId, temperature) {
     return new Promise((resolve, reject) => {
-        axios.put(`/plants/${id}`, {
+        myAxios().put(`/plants/${id}`, {
             name: name,
             pictureId: pictureId,
             temperature: temperature
@@ -61,14 +53,27 @@ export function editPlant(id, name, pictureId, temperature) {
         }).catch(err => reject(err));
     });
 }
+
 export function removePlant(id) {
     return new Promise((resolve, reject) => {
-        axios.delete(`/plants/${id}`).then(res => {
+        myAxios().delete(`/plants/${id}`).then(res => {
             // update local list
             plants = plants.filter(plant => plant.id != id);
             resolve(plants);
         }).catch(err => reject(err));
     });
+}
+
+export function convert(temp) {
+    if (settings.get().useFahrenheit) {
+        return temp;
+    } else {
+        return Math.round((temp * (9 / 5) + 32) * 10) / 10;
+    }
+}
+
+export function degreeType() {
+    return settings.get().useFahrenheit ? 'F' : 'C';
 }
 
 export const plantPicUrls = {

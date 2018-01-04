@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Panel, Glyphicon, Grid, Row, Col, Image } from 'react-bootstrap';
+import { convert, degreeType } from './plant';
 
 /*
 export interface IPlantBoxProps {
@@ -18,7 +19,7 @@ export interface IPlantBoxProps {
 export default class PlantBox extends React.Component {
 
     removeClicked() {
-        if(confirm(`Are you sure you want to delete '${this.props.name}'?`)) {
+        if (confirm(`Are you sure you want to delete '${this.props.name}'?`)) {
             this.props.onRemove();
         }
     }
@@ -49,7 +50,7 @@ export default class PlantBox extends React.Component {
                                 <h4>{this.props.name}</h4>
                             </Col>
                             <Col style={{ paddingRight: 0, paddingLeft: 0 }} xs={3}>
-                                <h3 style={{ marginTop: 10, textAlign: "right" }}>{this.props.minTempF}°</h3>
+                                <h3 style={{ marginTop: 10, textAlign: "right" }}>{convert(this.props.minTempF)}°{degreeType()}</h3>
                             </Col>
                         </Row>
                     </Grid>
