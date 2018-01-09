@@ -36,7 +36,7 @@ export default class SignupPage extends React.Component {
             if (res.data.status != 'OK') {
                 throw res;
             }
-
+            
             return myAxios().post('/signup', {
                 email: this.state.email,
                 latitude: this.state.lat,

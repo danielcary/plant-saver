@@ -4,6 +4,7 @@ const sql = require('mssql');
 
 const validator = require('./validator');
 const auth = require('./auth');
+const userIdCache = require('./userIdCache').route;
 const plantsRouter = require('./api/plants');
 const userRouter = require('./api/user');
 
@@ -23,10 +24,10 @@ const signupSchema = joi.object().keys({
 router.post('/signup', validator(signupSchema), (req, res) => {
     new sql.Request()
         .input('Email', sql.NVarChar, req.body.email)
-        .input('Latitude', sql.Decimal, req.body.latitude)
-        .input('Longitude', sql.Decimal, req.body.longitude)
+        .input('Latitude', sql.Decimal(6, 4), req.body.latitude)
+        .input('Longitude', sql.Decimal(7, 4), req.body.longitude)
         .input('UTCOffset', sql.VarChar, req.body.utcOffset)
-        .input('OAuthId', sql.NVarChar, req.user.id)
+        .input('OAuthId', sql.NVarChar, req.user.oAuthId)
         .input('OAuthProvider', sql.NVarChar, req.user.oAuthProvider)
         .query(`IF NOT EXISTS (SELECT * FROM UserLookup WHERE OAuthId=@OAuthId)
                 BEGIN
@@ -37,31 +38,8 @@ router.post('/signup', validator(signupSchema), (req, res) => {
         .catch(err => res.status(500).json(err));
 });
 
-// convert id from OAuth id to internal id
-let idCache = {};
-
-router.use((req, res, next) => {
-    // check cache first
-    if (idCache[req.user.id]) {
-        req.user.id = idCache[req.user.id];
-        next();
-    } else {
-        // look up in db
-        new sql.Request()
-            .input('Id', sql.VarChar, req.user.id)
-            .query('SELECT UserId AS id FROM UserLookup WHERE OAuthId=@Id')
-            .then(results => {
-                if (results.recordset.length == 1) {
-                    let id = results.recordset[0].id;
-                    idCache[req.user.id] = id;
-                    req.user.id = id;
-                    next();
-                } else {
-                    res.status(401).send('No User');
-                }
-            }).catch(err => next(err));
-    }
-});
+// use middleware for converting user oauthid to internal user id
+router.use(userIdCache);
 
 // use routers
 router.use('/user', userRouter);

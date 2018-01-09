@@ -15,9 +15,9 @@ let settings = null;
 
 export function login() {
     return new Promise((resolve, reject) => {
-        axios().get('/user')
-            .then(res => settings = res.data)
-            .then(() => resolve(settings))
+        axios()
+            .get('/user')
+            .then(res => resolve(settings = res.data))
             .catch(err => reject(err))
     });
 }
@@ -30,39 +30,14 @@ export function clear() {
     settings = null;
 }
 
-export function updateSettings(email, notificationsEnabled, useFahrenheit) {
+export function updateSettings(newSettings) {
     return new Promise((resolve, reject) => {
-        axios().put('/user/settings', {
-            email: email,
-            notificationsEnabled: notificationsEnabled,
-            useFahrenheit: useFahrenheit
-        }).then(res => {
-            // update locally 
-            settings.email = email;
-            settings.notificationsEnabled = notificationsEnabled;
-            settings.useFahrenheit = useFahrenheit;
-
-            resolve(settings);
-        }).catch(err => reject(err));
+        axios()
+            .put('/user/settings', newSettings)
+            .then(res => resolve(settings = Object.assign({}, newSettings)))
+            .catch(err => reject(err));
     });
 };
-
-export function updateLocation(latitude, longitude, utcOffset) {
-    return new Promise((resolve, reject) => {
-        axios().put('/user/location', {
-            latitude: latitude,
-            longitude: longitude,
-            utcOffset: utcOffset
-        }).then(res => {
-            // update locally
-            settings.latitude = latitude;
-            settings.longitude = longitude;
-            settings.utcOffset = utcOffset;
-
-            resolve(settings);
-        }).catch(err => reject(err));
-    });
-}
 
 export function deleteAccount() {
     return new Promise((resolve, reject) => {

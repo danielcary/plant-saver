@@ -55,7 +55,7 @@ module.exports = function (req, res, next) {
 
                 // set user info
                 req.user = {
-                    id: `G-${jwt.payload.sub}`,
+                    oAuthId: `G-${jwt.payload.sub}`,
                     oAuthProvider: 'Google',
                     email: jwt.payload.email,
                     name: jwt.payload.name

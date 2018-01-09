@@ -5,8 +5,8 @@
   "main": "./server/server.js",
   "scripts": {
     "start": "node ./server/server.js",
-    "app-dev": "node_modules/.bin/webpack -w",
-    "app-build": "node_modules/.bin/webpack"
+    "dev": "node_modules/.bin/webpack -w",
+    "build": "node_modules/.bin/webpack"
   },
   "repository": {
     "type": "git",

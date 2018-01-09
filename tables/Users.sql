@@ -4,8 +4,8 @@ CREATE TABLE [dbo].[Users]
 	[Email] NVARCHAR(320) NOT NULL,
 	[NotificationsEnabled] BIT NOT NULL DEFAULT 1,
 	[UseFahrenheit] BIT NOT NULL DEFAULT 1,
-    [Latitude] DECIMAL(3, 1) NOT NULL,
-    [Longitude] DECIMAL(4, 1) NOT NULL,
+    [Latitude] DECIMAL(6, 4) NOT NULL,
+    [Longitude] DECIMAL(7, 4) NOT NULL,
 	[UTCOffset] INT NOT NULL,
     [DateAdded] DATETIME NOT NULL DEFAULT GETUTCDATE()
 )

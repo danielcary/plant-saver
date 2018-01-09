@@ -13,8 +13,20 @@ export default class MapComponent extends React.Component {
         let defaultLat = this.props.lat || START_LAT;
         let defaultLng = this.props.lng || START_LNG;
 
-        if(!this.props.lat && !this.props.lng) {
+        if (!this.props.lat && !this.props.lng) {
             this.props.setCoords(START_LAT, START_LNG);
+
+            // try to get location automatically instead of using default lat, lng
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    this.setState({
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude,
+                        center: { lat: pos.coords.latitude, lng: pos.coords.longitude }
+                    });
+                    this.props.setCoords(this.state.lat, this.state.lng);
+                });
+            }
         }
 
         this.state = {
@@ -23,20 +35,9 @@ export default class MapComponent extends React.Component {
             center: { lat: defaultLat, lng: defaultLng }
         };
 
-        // get location automatically (if we can)
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                this.setState({
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
-                    center: { lat: pos.coords.latitude, lng: pos.coords.longitude }
-                });
-            });
-        }
-
         this.MyMap = withScriptjs(withGoogleMap(props =>
             <GoogleMap
-                defaultZoom={5}
+                defaultZoom={7}
                 defaultCenter={{ lat: defaultLat, lng: defaultLng }}
                 center={this.state.center}
                 onClick={e => this.mapClicked(e)}
