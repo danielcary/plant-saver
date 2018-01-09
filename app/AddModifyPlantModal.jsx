@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Modal, Row, Col, Button, Glyphicon, ControlLabel, FormGroup, InputGroup, FormControl } from 'react-bootstrap';
 
-import { plantPicUrls } from './plant';
+import { plantPicUrls, convertForDisplay, convertForSaving } from './plant';
 /*
 export interface IAddModifyPlantModelProps {
     title: string;
@@ -29,7 +29,7 @@ export default class AddModifyPlantModal extends React.Component {
         this.state = {
             currentPictureIndex: props.currentPictureIndex || 1,
             plantName: props.plantName || "",
-            alertTemperature: props.alertTemperature || (props.fahrenheit ? 32 : 0),
+            alertTemperature: convertForDisplay(props.alertTemperature || 32),
             errorMessage: ""
         };
 
@@ -74,9 +74,9 @@ export default class AddModifyPlantModal extends React.Component {
     save() {
         this.props.onSave(
             this.props.id,
-            this.state.currentPictureIndex,
             this.state.plantName,
-            this.state.alertTemperature
+            this.state.currentPictureIndex,
+            convertForSaving(this.state.alertTemperature)
         );
     }
 
@@ -114,11 +114,11 @@ export default class AddModifyPlantModal extends React.Component {
                                     onChange={e => this.onNameChange(e)} />
                             </FormGroup>
                             <FormGroup>
-                                <ControlLabel>Alert Temperature (°F)</ControlLabel>
+                                <ControlLabel>Alert Temperature (°{this.props.fahrenheit ? "F" : "C"})</ControlLabel>
                                 <FormControl
                                     type="number"
-                                    min={-99}
-                                    max={99}
+                                    min={convertForDisplay(-99)}
+                                    max={convertForDisplay(99)}
                                     step={0.1}
                                     value={this.state.alertTemperature}
                                     onChange={e => this.onTempChange(e)} />

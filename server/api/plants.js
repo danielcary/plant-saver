@@ -6,7 +6,7 @@ const validator = require('../validator');
 // request validation schemas
 const addUpdateSchema = joi.object().keys({
     name: joi.string().trim().min(1).max(100).required(),
-    pictureId: joi.number().min(1).max(3).required(),
+    pictureId: joi.number().min(1).max(4).required(),
     temperature: joi.number().min(-99).max(99).required()
 });
 

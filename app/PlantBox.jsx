@@ -1,20 +1,6 @@
 import * as React from 'react';
 import { Panel, Glyphicon, Grid, Row, Col, Image } from 'react-bootstrap';
-import { convert, degreeType } from './plant';
 
-/*
-export interface IPlantBoxProps {
-    plantId: number;
-    imageUrl: string;
-    minTempF: number;
-    currentTempF: number;
-    name: string;
-    fahrenheit: boolean;
-
-    onEdit: (id) => void;
-    onRemove: () => void;
-};
-*/
 
 export default class PlantBox extends React.Component {
 
@@ -50,7 +36,7 @@ export default class PlantBox extends React.Component {
                                 <h4>{this.props.name}</h4>
                             </Col>
                             <Col style={{ paddingRight: 0, paddingLeft: 0 }} xs={3}>
-                                <h3 style={{ marginTop: 10, textAlign: "right" }}>{convert(this.props.minTempF)}°{degreeType()}</h3>
+                                <h3 style={{ marginTop: 10, textAlign: "right" }}>{this.props.temp}°{this.props.degree}</h3>
                             </Col>
                         </Row>
                     </Grid>

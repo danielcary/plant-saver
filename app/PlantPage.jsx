@@ -6,6 +6,7 @@ import PlantBox from './PlantBox';
 import AddModifyPlantModal from './AddModifyPlantModal';
 
 import * as Plant from './plant';
+import { get as getSettings } from './settings';
 /*
 interface IPlantPageState {
     showAddPlantModal: boolean;
@@ -48,9 +49,8 @@ export default class PlantPage extends React.Component {
                     plantId={plant.id}
                     name={plant.name}
                     imageUrl={Plant.plantPicUrls[plant.pictureId]}
-                    minTempF={plant.temperature}
-                    currentTempF={40}
-                    fahrenheit
+                    temp={Plant.convertForDisplay(plant.temperature)}
+                    degree={Plant.degreeType()}
                     onEdit={() => this.setState({ editingPlant: plant })}
                     onRemove={() => this.removePlant(plant.id)}
                 />
@@ -76,7 +76,7 @@ export default class PlantPage extends React.Component {
         return <div>{renderComps.map(e => e)}</div>;
     }
 
-    addPlant(picIndex, name, temp) {
+    addPlant(name, picIndex, temp) {
         this.setState({ showAddPlantModal: false, loading: true }, () => {
             Plant.addPlant(name, picIndex, temp).then(res => {
                 this.setState({
@@ -91,7 +91,7 @@ export default class PlantPage extends React.Component {
         });
     }
 
-    savePlant(id, picIndex, name, temp) {
+    savePlant(id, name, picIndex, temp) {
         this.setState({ editingPlant: null, loading: true }, () => {
             Plant.editPlant(id, name, picIndex, temp).then(res => {
                 this.setState({
@@ -126,8 +126,9 @@ export default class PlantPage extends React.Component {
             <Grid>
                 {this.state.showAddPlantModal && <AddModifyPlantModal
                     onHide={() => this.setState({ showAddPlantModal: false })}
-                    onSave={this.addPlant}
-                    fahrenheit title="Add Plant" />}
+                    onSave={(id, name, picIndex, temp) => this.addPlant(name, picIndex, temp)}
+                    fahrenheit={getSettings().useFahrenheit}
+                    title="Add Plant" />}
                 {this.state.editingPlant && <AddModifyPlantModal
                     onHide={() => this.setState({ editingPlant: null })}
                     onSave={this.savePlant}
@@ -135,7 +136,8 @@ export default class PlantPage extends React.Component {
                     plantName={this.state.editingPlant.name}
                     alertTemperature={this.state.editingPlant.temperature}
                     currentPictureIndex={this.state.editingPlant.pictureId}
-                    fahrenheit title="Edit Plant" />}
+                    fahrenheit={getSettings().useFahrenheit}
+                    title="Edit Plant" />}
                 <PageHeader>
                     Your Plants <Glyphicon onClick={() => this.setState({ showAddPlantModal: true })} glyph="plus" />
                 </PageHeader>
