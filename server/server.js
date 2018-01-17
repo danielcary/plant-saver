@@ -44,5 +44,5 @@ app.get('*', (req, res) => {
 });
 
 // start https server
-https.createServer(app).listen(80);
+http.createServer(app).listen(80);
 https.createServer(credentials, app).listen(443);
