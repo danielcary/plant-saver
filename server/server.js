@@ -1,4 +1,5 @@
 const fs = require('fs');
+const http = require('http');
 const https = require('https');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -11,11 +12,20 @@ const adminRouter = require('./admin');
 
 // credentials for the https server
 const credentials = {
-    key: fs.readFileSync('sslcert/server.key', 'utf8'),
-    cert: fs.readFileSync('sslcert/server.crt', 'utf8')
+    key: fs.readFileSync(process.env.SSL_SERVER_KEY_PATH, 'utf8'),
+    cert: fs.readFileSync(process.env.SSL_SERVER_CERT_PATH, 'utf8')
 };
 
 const app = express();
+
+// force https
+app.use((req, res, next) => {
+    if(req.secure) {
+        next()
+    } else {
+        res.redirect('https://' + req.hostname + req.url);
+    }
+});
 
 // middleware to parse request info into JSON
 app.use(bodyParser.urlencoded({ extended: false })); // application/x-www-form-urlencoded
@@ -34,4 +44,5 @@ app.get('*', (req, res) => {
 });
 
 // start https server
+https.createServer(app).listen(80);
 https.createServer(credentials, app).listen(443);
