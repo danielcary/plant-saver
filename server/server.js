@@ -1,3 +1,5 @@
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -6,6 +8,12 @@ require('dotenv').config()
 const db = require('./db');
 const apiRouter = require('./api');
 const adminRouter = require('./admin');
+
+// credentials for the https server
+const credentials = {
+    key: fs.readFileSync('sslcert/server.key', 'utf8'),
+    cert: fs.readFileSync('sslcert/server.crt', 'utf8')
+};
 
 const app = express();
 
@@ -25,7 +33,5 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, "../", "public", "index.html"));
 });
 
-
-app.listen(3000, () => {
-    console.log('listening');
-});
+// start https server
+https.createServer(credentials, app).listen(443);
