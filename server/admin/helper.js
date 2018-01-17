@@ -1,3 +1,4 @@
+const axios = require('axios');
 
 module.exports.makeEmail = function (email, plants) {
     let messageContent = 'It is going to be too cold for ';
@@ -42,7 +43,7 @@ module.exports.getLow = async function (cache, lat, lng) {
         if (cache[`${lat},${lng}`]) {
             resolve(cache[`${lat},${lng}`]);
         } else {
-            axios.get(`https://api.darksky.net/forecast/${DARK_SKY_KEY}/${lat},${lng}`, {
+            axios.get(`https://api.darksky.net/forecast/${process.env.DARK_SKY_KEY}/${lat},${lng}`, {
                 params: { exclude: 'currently,minutely,daily,alerts,flags' }
             }).then(res => {
                 let low = res.data.hourly.data[0].temperature;

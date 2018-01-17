@@ -7,6 +7,7 @@ import AddModifyPlantModal from './AddModifyPlantModal';
 
 import * as Plant from './plant';
 import { get as getSettings } from './settings';
+import getAlerts from './alert';
 /*
 interface IPlantPageState {
     showAddPlantModal: boolean;
@@ -24,6 +25,7 @@ export default class PlantPage extends React.Component {
             showAddPlantModal: false,
             editingPlant: null,
             plants: [],
+            alerts: [],
             loading: true
         };
 
@@ -33,6 +35,10 @@ export default class PlantPage extends React.Component {
                 plants: res,
                 loading: false
             });
+        });
+
+        getAlerts().then(res => {
+
         });
 
         // bind methods

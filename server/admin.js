@@ -3,13 +3,11 @@ const express = require('express');
 const clearAlertsRouter = require('./admin/clearalerts');
 const createAlertsRouter = require('./admin/createalerts');
 
-const ADMIN_KEY = 'test';
-
 const router = express.Router();
 
 // verify admin key
 router.use((req, res, next) => {
-    if (req.body.key == 'test') {
+    if (req.headers.admin_key == process.env.ADMIN_KEY) {
         next();
     } else {
         res.sendStatus(401);
