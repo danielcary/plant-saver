@@ -96,5 +96,5 @@ class App extends React.Component {
     }
 }
 
-document.getElementsByName('google-signin-client_id')[0].setAttribute('google-signin-client_id', process.env.GOOGLE_OAUTH_AUD);
+document.getElementsByName('google-signin-client_id')[0].setAttribute('content', process.env.GOOGLE_OAUTH_AUD);
 ReactDOM.render(<App />, document.getElementById("app"));
