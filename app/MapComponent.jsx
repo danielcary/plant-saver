@@ -59,7 +59,7 @@ export default class MapComponent extends React.Component {
     render() {
         return (
             <this.MyMap
-                googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing"
+                googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&key=${process.env.GOOGLE_MAPS_KEY}&libraries=geometry,drawing`}
                 loadingElement={<div style={{ height: `100%` }} />}
                 containerElement={<div style={{ height: `400px` }} />}
                 mapElement={<div style={{ height: `100%` }} />}

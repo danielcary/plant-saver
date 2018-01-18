@@ -4,9 +4,11 @@
   "description": "",
   "main": "./server/server.js",
   "scripts": {
+    "setup": "npm install && npm run build-production",
     "start": "node ./server/server.js",
-    "dev": "node_modules/.bin/webpack -w",
-    "build": "node_modules/.bin/webpack"
+    "dev": "./node_modules/.bin/webpack -w",
+    "build": "./node_modules/.bin/webpack",
+    "build-production": "./node_modules/.bin/webpack -p"
   },
   "repository": {
     "type": "git",
