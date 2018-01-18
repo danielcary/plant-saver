@@ -11,7 +11,7 @@ const settingsSchema = joi.object().keys({
     useFahrenheit: joi.bool().required(),
     latitude: joi.number().min(-90).max(90).required(),
     longitude: joi.number().min(-180).max(180).required(),
-    utcOffset: joi.number().integer().min(-12).max(12).required()
+    utcOffset: joi.number().integer().min(-12).max(14).required()
 });
 
 const router = express.Router();
