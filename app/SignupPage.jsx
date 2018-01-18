@@ -32,11 +32,11 @@ export default class SignupPage extends React.Component {
 
     submit() {
         // get UTC offset for coords
-        axios.get(`https://maps.googleapis.com/maps/api/timezone/json?location=${this.state.lat},${this.state.lng}&timestamp=133116120&key=AIzaSyA6Ezb4LfyucxfLXzguIxwEJPHUyfuMPaQ`).then(res => {
+        axios.get(`https://maps.googleapis.com/maps/api/timezone/json?location=${this.state.lat},${this.state.lng}&timestamp=133116120&key=${process.env.GOOGLE_MAPS_KEY}`).then(res => {
             if (res.data.status != 'OK') {
                 throw res;
             }
-            
+
             return myAxios().post('/signup', {
                 email: this.state.email,
                 latitude: this.state.lat,

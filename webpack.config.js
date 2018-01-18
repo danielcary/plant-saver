@@ -1,6 +1,12 @@
-const webpack = require('webpack'); 
+const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
+
+let env = dotenv.parse(fs.readFileSync(path.join(__dirname, '.env')));
+// stringify so that the it has the quotes around each var
+Object.keys(env).forEach(key => env[key] = JSON.stringify(env[key]));
+
 
 const config = {
     entry: "./app/App.jsx",
@@ -21,7 +27,7 @@ const config = {
 
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': dotenv.parse(path.join(__dirname, '.env'))
+            'process.env': env
         })
     ]
 }

@@ -55,7 +55,7 @@ export default class SettingsPage extends React.Component {
                 && settings.get().longitude == this.state.settings.longitude) {
                 resolve();
             } else {
-                axios.get(`https://maps.googleapis.com/maps/api/timezone/json?location=${this.state.settings.latitude},${this.state.settings.longitude}&timestamp=133116120&key=AIzaSyA6Ezb4LfyucxfLXzguIxwEJPHUyfuMPaQ`)
+                axios.get(`https://maps.googleapis.com/maps/api/timezone/json?location=${this.state.settings.latitude},${this.state.settings.longitude}&timestamp=133116120&key=${process.env.GOOGLE_MAPS_KEY}`)
                     .then(res => {
                         if (res.data.status != 'OK') {
                             throw res;
