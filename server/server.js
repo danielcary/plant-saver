@@ -2,14 +2,22 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
 require('dotenv').config()
 
+// create express app
+const app = express();
 
-const apiRouter = require('./api');
-require('./db');
-require('./admin');
+// force https
+app.use((req, res, next) => {
+    if (req.secure) {
+        next()
+    } else {
+        res.redirect('https://' + req.hostname + req.url);
+    }
+});
+
+// apply routes
+require('./serverroutes')(app);
 
 // credentials for the https server
 const credentials = {
@@ -17,32 +25,6 @@ const credentials = {
     cert: fs.readFileSync(process.env.SSL_SERVER_CERT_PATH, 'utf8')
 };
 
-const app = express();
-
-// force https
-app.use((req, res, next) => {
-    if(req.secure) {
-        next()
-    } else {
-        res.redirect('https://' + req.hostname + req.url);
-    }
-});
-
-// middleware to parse request info into JSON
-app.use(bodyParser.urlencoded({ extended: false })); // application/x-www-form-urlencoded
-app.use(bodyParser.json()); // application/json
-
-// serve static files in public folder
-app.use(express.static(path.join(__dirname, "../", "public")));
-
-// route our api requests
-app.use('/api', apiRouter);
-
-// instead of 404, redirect to index page
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, "../", "public", "index.html"));
-});
-
-// start https server
+// start both servers
 http.createServer(app).listen(80);
 https.createServer(credentials, app).listen(443);
