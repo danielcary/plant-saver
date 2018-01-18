@@ -1,4 +1,5 @@
 const mssql = require('mssql');
+const winston = require('winston');
 
 const config = {
     server: process.env.DBCONN_SERVER,
@@ -15,8 +16,9 @@ const config = {
 (async () => {
     try {
         await mssql.connect(config);
+        winston.info('Connected to database server!')
     } catch (err) {
-        console.log(err);
+        winston.error(err);
         process.exit(-1);
     }
 })();

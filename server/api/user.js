@@ -1,6 +1,7 @@
 const express = require('express');
 const joi = require('joi');
 const sql = require('mssql');
+const winston = require('winston');
 const validator = require('../validator');
 const removeFromUserIdCache = require('../userIdCache').removeId;
 
@@ -22,7 +23,10 @@ router.get('/', (req, res) => {
         .input('Id', sql.Int, req.user.id)
         .query('SELECT Email AS email, NotificationsEnabled AS notificationsEnabled, UseFahrenheit AS useFahrenheit, Latitude AS latitude, Longitude AS longitude, UTCOffset AS utcOffset FROM Users WHERE Id=@Id')
         .then(results => res.json(results.recordset[0]))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 // update account settings
@@ -37,7 +41,10 @@ router.put('/settings', validator(settingsSchema), (req, res) => {
         .input('UTCOffset', sql.Int, req.body.utcOffset)
         .query('UPDATE Users SET Email=@Email, NotificationsEnabled=@NotificationsEnabled, UseFahrenheit=@UseFahrenheit, Latitude=@Latitude, Longitude=@Longitude, UTCOffset=@UTCOffset WHERE Id=@Id')
         .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 // delete account
@@ -47,7 +54,10 @@ router.delete('/', (req, res) => {
         .query('DELETE FROM Users WHERE Id=@Id')
         .then(() => removeFromUserIdCache(req.user.oAuthId))
         .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 

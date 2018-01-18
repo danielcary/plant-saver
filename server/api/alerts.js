@@ -1,5 +1,6 @@
 const express = require('express');
 const sql = require('mssql');
+const winston = require('winston');
 
 const router = express.Router();
 
@@ -9,7 +10,10 @@ router.get('/', (req, res) => {
         .input('Id', sql.Int, req.user.id)
         .query('SELECT Message FROM Alerts WHERE UserId=@Id')
         .then(results => res.json(results.recordset))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 

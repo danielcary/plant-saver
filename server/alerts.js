@@ -1,5 +1,5 @@
 const CronJob = require('cron').CronJob;
-
+const winston = require('winston');
 const createAlerts = require('./alerts/clearalerts');
 const clearAlerts = require('./alerts/clearalerts');
 
@@ -35,14 +35,23 @@ new CronJob('0 0 21 * * *', true, timezone, () => timer(-3));
 new CronJob('0 0 22 * * *', true, timezone, () => timer(-4));
 new CronJob('0 0 23 * * *', true, timezone, () => timer(-5));
 
-//
 function timer(utcOffset) {
     createAlerts(utcOffset, err => {
+        winston.info(`About to create alerts for ${utcOffset}-UTC`);
         if (err) {
-
+            winston.error(`Error creating alerts for ${utcOffset}-UTC: ${err}`);
         } else {
-
-            setTimeout(() => clearAlerts(utcOffset, () => { }), 1000 * 60 * 60 * 12);
+            winston.info(`Alerts created for ${utcOffset}-UTC!`)
+            // no error so set timeout to clear alerts
+            setTimeout(() => {
+                winston.info(`About to clear alerts for ${utcOffset}-UTC`);
+                clearAlerts(utcOffset, err => {
+                    if (err) {
+                        winston.error(`Error clear alerts for ${utcOffset}-UTC: ${err}`);
+                    }
+                    winston.info(`Alerts cleared for ${utcOffset}-UTC!`)
+                })
+            }, 1000 * 60 * 60 * 12);
         }
     });
 }

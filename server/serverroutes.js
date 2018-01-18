@@ -1,7 +1,17 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
+const winston = require('winston');
 
+// set up logger
+if (!fs.existsSync(path.join(__dirname, '../logs'))) {
+    fs.mkdirSync(path.join(__dirname, '../logs'))
+}
+winston.add(winston.transports.File, { filename: path.join(__dirname, '../logs', Date.now() + '.log'), json: false });
+winston.remove(winston.transports.Console);
+
+// get the api route
 const apiRouter = require('./api');
 
 // initialize database and alert cron jobs

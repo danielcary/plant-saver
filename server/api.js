@@ -1,7 +1,7 @@
 const express = require('express');
 const joi = require('joi');
 const sql = require('mssql');
-
+const winston = require('winston');
 const validator = require('./validator');
 const auth = require('./auth');
 const userIdCache = require('./userIdCache').route;
@@ -35,7 +35,10 @@ router.post('/signup', validator(signupSchema), (req, res) => {
                     INSERT INTO UserLookup (UserId, OAuthId, OAuthProvider) VALUES (SCOPE_IDENTITY(), @OAuthId, @OAuthProvider);
                 END`)
         .then(() => res.sendStatus(201))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err);
+        });
 });
 
 // use middleware for converting user oauthid to internal user id

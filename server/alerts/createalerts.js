@@ -1,6 +1,5 @@
 const sql = require('mssql');
 const sendgrid = require('@sendgrid/mail');
-
 const { getLow, makeAlerts, makeEmail } = require('./helper');
 
 const DARK_SKY_KEY = process.env.DARK_SKY_KEY;

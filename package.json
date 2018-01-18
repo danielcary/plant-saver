@@ -35,7 +35,8 @@
     "jws": "^3.1.4",
     "lodash": "^4.17.4",
     "mssql": "^4.1.0",
-    "rsa-pem-from-mod-exp": "^0.8.4"
+    "rsa-pem-from-mod-exp": "^0.8.4",
+    "winston": "^2.4.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

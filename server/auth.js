@@ -1,6 +1,7 @@
 const axios = require('axios');
 const jws = require('jws');
 const getPem = require('rsa-pem-from-mod-exp');
+const winston = require('winston');
 
 const CERTS_URL = 'https://www.googleapis.com/oauth2/v3/certs';
 const MY_AUD = process.env.GOOGLE_OAUTH_AUD;
@@ -66,7 +67,7 @@ module.exports = function (req, res, next) {
                 res.status(401).send('Bad JWT');
             }
         }).catch(err => {
-            console.log(err);
+            winston.error(err);
             res.sendStatus(500);
         });
     }

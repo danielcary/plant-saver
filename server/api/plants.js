@@ -1,6 +1,7 @@
 const express = require('express');
 const joi = require('joi');
 const sql = require('mssql');
+const winston = require('winston');
 const validator = require('../validator');
 
 // request validation schemas
@@ -29,7 +30,10 @@ router.get('/', (req, res) => {
         .input('OwnerId', sql.Int, req.user.id)
         .query('SELECT Id AS id, Name AS name, PictureId AS pictureId, Temperature AS temperature FROM Plants WHERE OwnerId=@OwnerId')
         .then(results => res.json(results.recordset))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 // add plant
@@ -41,7 +45,10 @@ router.post('/', validator(addUpdateSchema), (req, res) => {
         .input('Temperature', sql.Decimal, req.body.temperature)
         .query(`INSERT INTO Plants (OwnerId, Name, PictureId, Temperature) VALUES (@OwnerId, @Name, @PictureId, @Temperature); SELECT SCOPE_IDENTITY() as id;`)
         .then(results => res.json(results.recordset[0]))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 // update plant
@@ -54,7 +61,10 @@ router.put('/:plantId', validator(addUpdateSchema), (req, res) => {
         .input('Temperature', sql.Decimal, req.body.temperature)
         .query('UPDATE Plants SET Name=@Name, PictureId=@PictureId, Temperature=@Temperature WHERE Id=@Id AND OwnerId=@OwnerId;')
         .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 // delete plant
@@ -64,7 +74,10 @@ router.delete('/:plantId', (req, res) => {
         .input('OwnerId', sql.Int, req.user.id)
         .query('DELETE FROM Plants WHERE Id=@Id AND OwnerId=@OwnerId')
         .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).json(err));
+        .catch(err => {
+            winston.error(err);
+            res.status(500).json(err)
+        });
 });
 
 
