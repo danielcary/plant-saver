@@ -8,67 +8,73 @@ import SettingsPage from './SettingsPage';
 import AboutPage from './AboutPage';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
-import * as gapi from './gapi';
 import * as settings from './settings';
-
-let oAuthSignedIn = false;
+import { setTimeout } from 'timers';
 
 class App extends React.Component {
 
     constructor(props) {
         super(props);
 
-        // see if user still has oauth credentials
-        setTimeout(() => {
-            gapi.setCurrentUserListener(() => {
+        this.state = {
+            signedIn: false,
+            oAuthEmail: null
+        };
+    }
 
-                oAuthSignedIn = gapi.isSignedIn()
+    loginSuccess(res) {
+        // use the id token for authenticated call
+        setAuth(`Bearer ${res.tokenId}`)
 
-                if (oAuthSignedIn) {
-                    setAuth(`Bearer ${gapi.getIdToken()}`)
-
-                    settings.login().then(res => {
-                        console.log(res);
-                        this.forceUpdate();
-                    }).catch(err => {
-                        if (err.response.status != 401) {
-                            alert('Error logging in!');
-                            console.log(err);
-                        }
-                        this.forceUpdate();
-                    });
-                } else {
-                    settings.clear();
-                    this.forceUpdate();
+        // get user info
+        settings
+            .login()
+            .catch(err => {
+                if (err.response.status != 401) {
+                    alert('Error logging in!');
+                    console.log(err);
                 }
-
             })
-        }, 100);
+            .then(() => this.setState({ signedIn: true, oAuthEmail: res.profileObj.email }));
+    }
+
+    logout() {
+        setAuth('');
+        settings.clear();
+        this.setState({ signedIn: false, oAuthEmail: null });
     }
 
     renderSwitch() {
-        if (oAuthSignedIn && settings.get() != null) {
+        if (this.state.signedIn && settings.get() != null) {
             return (
                 <Switch>
                     <Route path="/plants" exact component={PlantPage} />
-                    <Route path="/settings" exact component={SettingsPage} />
+                    <Route path="/settings" exact render={props =>
+                        <SettingsPage {...props}
+                            signOut={() => this.setState({ signedIn: false, oAuthEmail: null })}
+                        />
+                    } />
                     <Route path="/about" exact component={AboutPage} />
+                    <Redirect from="/logout" to="/" />
                     <Redirect to="/plants" />
                 </Switch>
             );
-        } else if (oAuthSignedIn) {
+        } else if (this.state.signedIn) {
             return (
                 <Switch>
-                    <Route path="/signup" exact render={props => <SignupPage signedUp={() => {
-                        settings.login()
-                            .then(res => console.log(res))
-                            .catch(err => {
-                                if (err.response.status != 401) {
-                                    alert('Error logging in!');
-                                }
-                                console.log(err);
-                            }).then(() => this.forceUpdate());
-                    }} />} />
+                    <Route path="/signup" exact render={props =>
+                        <SignupPage {...props}
+                            email={this.state.oAuthEmail}
+                            signedUp={() => {
+                                settings.login()
+                                    .then(res => console.log(res))
+                                    .catch(err => {
+                                        if (err.response.status != 401) {
+                                            alert('Error logging in!');
+                                        }
+                                        console.log(err);
+                                    }).then(() => this.forceUpdate());
+                            }} />} />
                     <Route path="/about" exact component={AboutPage} />
                     <Redirect to="/signup" />
                 </Switch>
@@ -76,7 +82,10 @@ class App extends React.Component {
         } else {
             return (
                 <Switch>
-                    <Route path="/login" exact component={LoginPage} />
+                    <Route path="/login" exact render={props =>
+                        <LoginPage {...props}
+                            onLoginSuccess={this.loginSuccess.bind(this)}
+                        />} />
                     <Route path="/about" exact component={AboutPage} />
                     <Redirect to="/login" />
                 </Switch>
@@ -85,10 +94,16 @@ class App extends React.Component {
     }
 
     render() {
+
         return (
             <Router>
                 <div>
-                    <Route render={props => (<NavBarComponent {...props} loggedIn={oAuthSignedIn && settings.get() != null} />)} />
+                    <Route render={props =>
+                        <NavBarComponent {...props}
+                            logout={this.logout.bind(this)}
+                            signingUp={this.state.signedIn && settings.get() == null}
+                            loggedIn={this.state.signedIn && settings.get() != null}
+                        />} />
                     {this.renderSwitch()}
                 </div>
             </Router>
@@ -96,5 +111,5 @@ class App extends React.Component {
     }
 }
 
-document.getElementsByName('google-signin-client_id')[0].setAttribute('content', process.env.GOOGLE_OAUTH_AUD);
+//document.getElementsByName('google-signin-client_id')[0].setAttribute('content', process.env.GOOGLE_OAUTH_AUD);
 ReactDOM.render(<App />, document.getElementById("app"));

@@ -3,7 +3,6 @@ import { Grid, Row, Col, Alert, PageHeader, FormGroup, FormControl, ControlLabel
 import axios from 'axios';
 import MapComponent from './MapComponent';
 import * as settings from './settings';
-import { signOut } from './gapi';
 
 export default class SettingsPage extends React.Component {
 
@@ -84,7 +83,7 @@ export default class SettingsPage extends React.Component {
     deleteAccount() {
         if (confirm("Are you sure you wish to delete your account? This cannot be reveresed.")) {
             settings.deleteAccount()
-                .then(() => signOut())
+                .then(() => this.props.signOut())
                 .catch(err => {
                     console.log(err);
                     alert('Error deleting account!');

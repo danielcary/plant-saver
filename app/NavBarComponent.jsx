@@ -2,8 +2,6 @@ import * as React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { Link, match, RouteComponentProps } from 'react-router-dom';
 
-import * as gapi from './gapi';
-
 export default class NavBarComponent extends React.Component {
 
     constructor(props) {
@@ -14,10 +12,6 @@ export default class NavBarComponent extends React.Component {
 
     getActive(path) {
         return this.props.location.pathname.endsWith(path) ? "active" : ""
-    }
-
-    logout() {
-        gapi.signOut()
     }
 
     renderLoggedInNav() {
@@ -33,7 +27,7 @@ export default class NavBarComponent extends React.Component {
                     <li className={this.getActive("about")}><Link to="/about">About</Link></li>
                 </Nav>
                 <Nav>
-                    <li><a onClick={() => gapi.signOut()}>Logout</a></li>
+                    <li><Link onClick={this.props.logout} to="/logout">Logout</Link></li>
                 </Nav>
             </Navbar.Collapse>
         );
@@ -42,12 +36,12 @@ export default class NavBarComponent extends React.Component {
     renderLoggedOutNav() {
         return (
             <Navbar.Collapse>
-                {this.props.location.pathname.endsWith("login") &&
+                {!this.props.signingUp &&
                     <Nav>
                         <li className={this.getActive("login")}><Link to="/login">Login</Link></li>
                     </Nav>
                 }
-                {this.props.location.pathname.endsWith("signup") &&
+                {this.props.signingUp &&
                     <Nav>
                         <li className={this.getActive("signup")}><Link to="/signup">Signup</Link></li>
                     </Nav>
@@ -55,9 +49,9 @@ export default class NavBarComponent extends React.Component {
                 <Nav>
                     <li className={this.getActive("about")}><Link to="/about">About</Link></li>
                 </Nav>
-                {this.props.location.pathname.endsWith("signup") &&
+                {this.props.signingUp &&
                     <Nav>
-                        <li><a onClick={() => gapi.signOut()}>Switch Google Accounts</a></li>
+                        <li><Link to="/signup" onClick={this.props.logout}>Switch Google Accounts</Link></li>
                     </Nav>
                 }
             </Navbar.Collapse>

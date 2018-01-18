@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     new sql.Request()
         .input('Id', sql.Int, req.user.id)
-        .query('SELECT Message FROM Alerts WHERE UserId=@Id')
+        .query('SELECT Message as message FROM Alerts WHERE UserId=@Id')
         .then(results => res.json(results.recordset))
         .catch(err => {
             winston.error(err);

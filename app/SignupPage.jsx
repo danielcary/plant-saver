@@ -3,7 +3,6 @@ import { Panel, Grid, Col, FormControl, Form, FormGroup, ControlLabel, Button } 
 import axios from 'axios';
 import myAxios from './axios';
 
-import * as gapi from './gapi';
 import MapComponent from './MapComponent';
 
 export default class SignupPage extends React.Component {
@@ -12,7 +11,7 @@ export default class SignupPage extends React.Component {
         super(props);
 
         this.state = {
-            email: gapi.getBasicProfile().U3,
+            email: this.props.email,
             lat: 0,
             lng: 0
         };
@@ -63,7 +62,8 @@ export default class SignupPage extends React.Component {
                             <Col sm={7}>
                                 <FormControl
                                     type="email"
-                                    placeholder={gapi.getBasicProfile().U3}
+                                    onChange={e => this.setState({ email: e.target.value })}
+                                    placeholder={this.props.email}
                                     value={this.state.email} />
                             </Col>
                         </FormGroup>

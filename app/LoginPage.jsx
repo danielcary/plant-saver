@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { Panel, Grid, FormControl, FormGroup, ControlLabel, Button } from 'react-bootstrap';
-
+import GoogleLogin from 'react-google-login';
 
 export default class LoginPage extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            email: '',
-            password: ''
-        };
-
     }
 
     render() {
@@ -19,7 +13,11 @@ export default class LoginPage extends React.Component {
         return (
             <Grid>
                 <Panel>
-                    <div className="g-signin2" ></div>
+                    <GoogleLogin
+                        clientId={process.env.GOOGLE_OAUTH_AUD}
+                        onSuccess={this.props.onLoginSuccess}
+                        onFailure={res => console.log(res)}
+                    />
                 </Panel>
             </Grid>
         );

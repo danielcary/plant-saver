@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { Link, match } from 'react-router-dom';
-import { Nav, Navbar, NavItem, Grid, Modal, Jumbotron, PageHeader, Radio, FormGroup, ControlLabel, FormControl, Button, InputGroup, Row, Col, Well, Glyphicon } from 'react-bootstrap';
-
+import { Nav, Navbar, NavItem, Grid, Modal, Alert, Jumbotron, PageHeader, Radio, FormGroup, ControlLabel, FormControl, Button, InputGroup, Row, Col, Well, Glyphicon } from 'react-bootstrap';
 import PlantBox from './PlantBox';
 import AddModifyPlantModal from './AddModifyPlantModal';
-
 import * as Plant from './plant';
 import { get as getSettings } from './settings';
 import getAlerts from './alert';
@@ -37,9 +35,7 @@ export default class PlantPage extends React.Component {
             });
         });
 
-        getAlerts().then(res => {
-
-        });
+        getAlerts().then(alerts => this.setState({ alerts: alerts }));
 
         // bind methods
         this.addPlant = this.addPlant.bind(this);
@@ -145,8 +141,11 @@ export default class PlantPage extends React.Component {
                     fahrenheit={getSettings().useFahrenheit}
                     title="Edit Plant" />}
                 <PageHeader>
-                    Your Plants <Glyphicon onClick={() => this.setState({ showAddPlantModal: true })} glyph="plus" />
+                    Your Plants <a onClick={() => this.setState({ showAddPlantModal: true })}><Glyphicon glyph="plus" /></a>
                 </PageHeader>
+                {this.state.alerts.map((alert, index) =>
+                    <Alert key={index} bsStyle="danger">{alert.message}</Alert>
+                )}
                 {this.state.loading && <div style={{ marginTop: 100 }} className="loader"></div>}
 
                 {!this.state.loading && this.renderBoxes()}

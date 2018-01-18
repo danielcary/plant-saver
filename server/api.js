@@ -7,6 +7,7 @@ const auth = require('./auth');
 const userIdCache = require('./userIdCache').route;
 const plantsRouter = require('./api/plants');
 const userRouter = require('./api/user');
+const alertsRouter = require('./api/alerts');
 
 const router = express.Router();
 
@@ -47,6 +48,7 @@ router.use(userIdCache);
 // use routers
 router.use('/user', userRouter);
 router.use('/plants', plantsRouter);
+router.use('/alerts', alertsRouter);
 
 
 module.exports = router;
