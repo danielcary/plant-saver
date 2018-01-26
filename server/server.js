@@ -2,6 +2,7 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const express = require('express');
+const ocsp = require('ocsp');
 require('dotenv').config()
 
 // create express app
@@ -27,4 +28,37 @@ const credentials = {
 
 // start both servers
 http.createServer(app).listen(80);
-https.createServer(credentials, app).listen(443);
+let httpsServer = https.createServer(credentials, app);
+
+let ocspCache = new ocsp.Cache();
+
+httpsServer.on('OCSPRequest', (cert, issuer, cb) => {
+    ocsp.getOCSPURI(cert, (err, uri) => {
+        if (err) {
+            return cb(err);
+        }
+        if (uri === null) {
+            return cb();
+        }
+
+        var req = ocsp.request.generate(cert, issuer);
+        ocspCache.probe(req.id, (err, cached) => {
+            if (err) {
+                return cb(err);
+            }
+            if (cached !== false) {
+                return cb(null, cached.response);
+            }
+
+            var options = {
+                url: uri,
+                ocsp: req.data
+            };
+
+            ocspCache.request(req.id, options, cb);
+        });
+    });
+});
+
+
+httpsServer.listen(443);
