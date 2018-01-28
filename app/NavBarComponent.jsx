@@ -1,66 +1,57 @@
 import * as React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Link, match, RouteComponentProps } from 'react-router-dom';
 
 export default class NavBarComponent extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.getActive = this.getActive.bind(this);
-    }
-
-    getActive(path) {
-        return this.props.location.pathname.endsWith(path) ? "active" : ""
-    }
-
     renderLoggedInNav() {
         return (
-            <Navbar.Collapse>
-                <Nav>
-                    <li className={this.getActive("plants")}><Link to="/plants">Plants</Link></li>
-                </Nav>
-                <Nav>
-                    <li className={this.getActive("settings")}><Link to="/settings">Settings</Link></li>
-                </Nav>
-                <Nav>
-                    <li className={this.getActive("about")}><Link to="/about">About</Link></li>
-                </Nav>
-                <Nav>
-                    <li><Link onClick={this.props.logout} to="/logout">Logout</Link></li>
-                </Nav>
-            </Navbar.Collapse>
+            <Nav>
+                <LinkContainer to="/plants">
+                    <NavItem>Plants</NavItem>
+                </LinkContainer>
+                <LinkContainer to="/settings">
+                    <NavItem>Settings</NavItem>
+                </LinkContainer>
+                <LinkContainer to="/about">
+                    <NavItem>About</NavItem>
+                </LinkContainer>
+                <LinkContainer to="/logout">
+                    <NavItem onClick={this.props.logout} >Logout</NavItem>
+                </LinkContainer>
+            </Nav>
         );
     }
 
     renderLoggedOutNav() {
         return (
-            <Navbar.Collapse>
+            <Nav>
                 {!this.props.signingUp &&
-                    <Nav>
-                        <li className={this.getActive("login")}><Link to="/login">Login</Link></li>
-                    </Nav>
+                    <LinkContainer to="/login">
+                        <NavItem>Login</NavItem>
+                    </LinkContainer>
                 }
                 {this.props.signingUp &&
-                    <Nav>
-                        <li className={this.getActive("signup")}><Link to="/signup">Signup</Link></li>
-                    </Nav>
+                    <LinkContainer to="/signup">
+                        <NavItem>Signup</NavItem>
+                    </LinkContainer>
                 }
-                <Nav>
-                    <li className={this.getActive("about")}><Link to="/about">About</Link></li>
-                </Nav>
+                <LinkContainer to="/about">
+                    <NavItem>About</NavItem>
+                </LinkContainer>
                 {this.props.signingUp &&
-                    <Nav>
-                        <li><Link to="/signup" onClick={this.props.logout}>Switch Google Accounts</Link></li>
-                    </Nav>
+                    <LinkContainer to="/signup">
+                        <NavItem onClick={this.props.logout}>Switch Google Accountsp</NavItem>
+                    </LinkContainer>
                 }
-            </Navbar.Collapse>
+            </Nav>
         );
     }
 
     render() {
         return (
-            <Navbar inverse fixedTop>
+            <Navbar fixedTop>
                 <Navbar.Header>
                     <Navbar.Brand>
                         Plant Saver
