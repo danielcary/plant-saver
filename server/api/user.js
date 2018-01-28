@@ -9,7 +9,7 @@ const joi = require('joi');
 const sql = require('mssql');
 const winston = require('winston');
 const validator = require('../validator');
-const removeFromUserIdCache = require('../userIdCache').removeId;
+const removeFromUserIdCache = require('../useridcache').removeId;
 
 // update validation schemas
 const settingsSchema = joi.object().keys({
