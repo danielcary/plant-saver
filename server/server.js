@@ -3,7 +3,7 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const ocsp = require('ocsp');
-require('dotenv').config()
+require('dotenv').config({ path: "server.env" });
 
 // create express app
 const app = express();
