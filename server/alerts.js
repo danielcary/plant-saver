@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * alerts.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const CronJob = require('cron').CronJob;
 const winston = require('winston');
 const createAlerts = require('./alerts/clearalerts');

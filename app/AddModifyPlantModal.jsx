@@ -1,25 +1,12 @@
+/*
+ * Plant Saver
+ * AddModifyPlantModal.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import { Modal, Row, Col, Button, Glyphicon, ControlLabel, FormGroup, InputGroup, FormControl } from 'react-bootstrap';
-
 import { plantPicUrls, convertForDisplay, convertForSaving } from './plant';
-/*
-export interface IAddModifyPlantModelProps {
-    title: string;
-    fahrenheit: boolean;
-    onHide: () => void;
-    onSave: (picIndex: number, name: string, temp: number) => void
-
-    currentPictureIndex?: number;
-    plantName?: string;
-    alertTemperature?: number;
-}
-
-interface IAddModifyPlantModalState {
-    currentPictureIndex: number;
-    plantName: string;
-    alertTemperature: number;
-    errorMessage: string;
-}*/
 
 export default class AddModifyPlantModal extends React.Component {
 
@@ -43,8 +30,6 @@ export default class AddModifyPlantModal extends React.Component {
     }
 
     onTempChange(e) {
-
-
         this.setState({
             alertTemperature: e.target.value
         });

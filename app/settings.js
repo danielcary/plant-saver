@@ -1,15 +1,10 @@
-import axios from './axios';
-
 /*
-export interface ISettings {
-    email: string;
-    notificationsEnabled: boolean;
-    useFahrenheit: boolean;
-    latitude: number;
-    longitude: number;
-    utcOffset: number;
-};
+ * Plant Saver
+ * settings.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
 */
+import axios from './axios';
 
 let settings = null;
 

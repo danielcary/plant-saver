@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * App.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
@@ -9,7 +15,6 @@ import AboutPage from './AboutPage';
 import LoginPage from './LoginPage';
 import SignupPage from './SignupPage';
 import * as settings from './settings';
-import { setTimeout } from 'timers';
 
 class App extends React.Component {
 

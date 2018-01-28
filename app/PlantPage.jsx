@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * PlantPage.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import { Link, match } from 'react-router-dom';
 import { Nav, Navbar, NavItem, Grid, Modal, Alert, Jumbotron, PageHeader, Radio, FormGroup, ControlLabel, FormControl, Button, InputGroup, Row, Col, Well, Glyphicon } from 'react-bootstrap';
@@ -6,13 +12,6 @@ import AddModifyPlantModal from './AddModifyPlantModal';
 import * as Plant from './plant';
 import { get as getSettings } from './settings';
 import getAlerts from './alert';
-/*
-interface IPlantPageState {
-    showAddPlantModal: boolean;
-    editingPlant: IPlant;
-    plants: IPlant[];
-    loading: boolean;
-}*/
 
 export default class PlantPage extends React.Component {
 

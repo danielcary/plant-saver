@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * alerts.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const express = require('express');
 const sql = require('mssql');
 const winston = require('winston');

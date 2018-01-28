@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * db.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const mssql = require('mssql');
 const winston = require('winston');
 

@@ -1,5 +1,11 @@
+/*
+ * Plant Saver
+ * LoginPage.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
-import { Panel, Grid, FormControl, Image, FormGroup, ControlLabel, Button } from 'react-bootstrap';
+import { Panel, PageHeader, Grid, FormControl, Image, FormGroup, ControlLabel, Button } from 'react-bootstrap';
 import GoogleLogin from 'react-google-login';
 
 export default class LoginPage extends React.Component {
@@ -27,22 +33,23 @@ export default class LoginPage extends React.Component {
 
         return (
             <Grid>
-                <Panel >
-                    <div style={{ textAlign: "center" }}>
-                        <GoogleLogin
-                            clientId={process.env.GOOGLE_OAUTH_AUD}
-                            onSuccess={this.props.onLoginSuccess}
-                            onFailure={res => console.log(res)}
-                            tag="a" type="" style={{}}>
-                            <Image
-                                onMouseEnter={() => this.setState({ buttonState: "focus" })}
-                                onMouseLeave={() => this.setState({ buttonState: "normal" })}
-                                onMouseDown={() => this.setState({ buttonState: "down" })}
-                                onMouseUp={() => this.setState({ buttonState: "normal" })}
-                                src={this.getSrc()} />
-                        </GoogleLogin>
-                    </div>
-                </Panel>
+                <PageHeader>
+                    Login
+                    </PageHeader>
+                <div style={{ textAlign: "center" }}>
+                    <GoogleLogin
+                        clientId={process.env.GOOGLE_OAUTH_AUD}
+                        onSuccess={this.props.onLoginSuccess}
+                        onFailure={res => console.log(res)}
+                        tag="a" type="" style={{}}>
+                        <Image
+                            onMouseEnter={() => this.setState({ buttonState: "focus" })}
+                            onMouseLeave={() => this.setState({ buttonState: "normal" })}
+                            onMouseDown={() => this.setState({ buttonState: "down" })}
+                            onMouseUp={() => this.setState({ buttonState: "normal" })}
+                            src={this.getSrc()} />
+                    </GoogleLogin>
+                </div>
             </Grid>
         );
     }

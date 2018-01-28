@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * useridcache.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const sql = require('mssql');
 
 let idCache = {};

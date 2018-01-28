@@ -1,8 +1,13 @@
+/*
+ * Plant Saver
+ * SignupPage.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import { Panel, Grid, Col, FormControl, Form, FormGroup, ControlLabel, Button } from 'react-bootstrap';
 import axios from 'axios';
 import myAxios from './axios';
-
 import MapComponent from './MapComponent';
 
 export default class SignupPage extends React.Component {

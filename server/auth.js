@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * auth.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const axios = require('axios');
 const jws = require('jws');
 const getPem = require('rsa-pem-from-mod-exp');

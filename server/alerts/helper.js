@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * helper.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const axios = require('axios');
 
 module.exports.makeEmail = function (email, plants) {

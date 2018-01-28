@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * user.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const express = require('express');
 const joi = require('joi');
 const sql = require('mssql');

@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * server.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 const fs = require('fs');
 const http = require('http');
 const https = require('https');

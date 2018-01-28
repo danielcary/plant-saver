@@ -1,6 +1,11 @@
+/*
+ * Plant Saver
+ * PlantBox.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import { Panel, Glyphicon, Grid, Row, Col, Image } from 'react-bootstrap';
-
 
 export default class PlantBox extends React.Component {
 

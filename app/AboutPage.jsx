@@ -1,3 +1,9 @@
+/*
+ * Plant Saver
+ * AboutPage.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import { Grid, Panel, PageHeader, Row, Col } from 'react-bootstrap';
 
@@ -12,7 +18,8 @@ export default class AboutPage extends React.Component {
                 <Row>
                     <Col sm={7}>
                         <p>
-                            Plant Saver helps you
+                        Plant Saver sends you alerts to your email when it is going to be too cold for your outdoor plants. Simply enter the temperature you want to be reminded out.
+                        Then, based on your location, we will send you an email in the evening if it is going to be at or below that temperature. 
                         </p>
                     </Col>
                     <Col sm={5}>
