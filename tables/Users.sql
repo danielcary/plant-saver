@@ -1,0 +1,11 @@
+CREATE TABLE [dbo].[Users]
+(
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[Email] NVARCHAR(320) NOT NULL,
+	[NotificationsEnabled] BIT NOT NULL DEFAULT 1,
+	[UseFahrenheit] BIT NOT NULL DEFAULT 1,
+    [Latitude] DECIMAL(6, 4) NOT NULL,
+    [Longitude] DECIMAL(7, 4) NOT NULL,
+	[UTCOffset] INT NOT NULL,
+    [DateAdded] DATETIME NOT NULL DEFAULT GETUTCDATE()
+)

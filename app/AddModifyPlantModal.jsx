@@ -1,35 +1,22 @@
+/*
+ * Plant Saver
+ * AddModifyPlantModal.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import { Modal, Row, Col, Button, Glyphicon, ControlLabel, FormGroup, InputGroup, FormControl } from 'react-bootstrap';
+import { plantPicUrls, convertForDisplay, convertForSaving } from './plant';
 
-import { plantPicUrls } from './plant';
+export default class AddModifyPlantModal extends React.Component {
 
-export interface IAddModifyPlantModelProps {
-    title: string;
-    fahrenheit: boolean;
-    onHide: () => void;
-    onSave: (picIndex: number, name: string, temp: number) => void
-
-    currentPictureIndex?: number;
-    plantName?: string;
-    alertTemperature?: number;
-}
-
-interface IAddModifyPlantModalState {
-    currentPictureIndex: number;
-    plantName: string;
-    alertTemperature: number;
-    errorMessage: string;
-}
-
-export default class AddModifyPlantModal extends React.Component<IAddModifyPlantModelProps, IAddModifyPlantModalState> {
-
-    constructor(props: IAddModifyPlantModelProps) {
+    constructor(props) {
         super(props);
 
         this.state = {
             currentPictureIndex: props.currentPictureIndex || 1,
             plantName: props.plantName || "",
-            alertTemperature: props.alertTemperature || (props.fahrenheit ? 32 : 0),
+            alertTemperature: convertForDisplay(props.alertTemperature || 32),
             errorMessage: ""
         };
 
@@ -43,14 +30,12 @@ export default class AddModifyPlantModal extends React.Component<IAddModifyPlant
     }
 
     onTempChange(e) {
-
-
         this.setState({
             alertTemperature: e.target.value
         });
     }
 
-    arrowOver(right: boolean) {
+    arrowOver(right) {
 
         let index = this.state.currentPictureIndex;
         index += right ? 1 : -1;
@@ -73,9 +58,10 @@ export default class AddModifyPlantModal extends React.Component<IAddModifyPlant
 
     save() {
         this.props.onSave(
-            this.state.currentPictureIndex,
+            this.props.id,
             this.state.plantName,
-            this.state.alertTemperature
+            this.state.currentPictureIndex,
+            convertForSaving(this.state.alertTemperature)
         );
     }
 
@@ -113,11 +99,11 @@ export default class AddModifyPlantModal extends React.Component<IAddModifyPlant
                                     onChange={e => this.onNameChange(e)} />
                             </FormGroup>
                             <FormGroup>
-                                <ControlLabel>Alert Temperature (°F)</ControlLabel>
+                                <ControlLabel>Alert Temperature (°{this.props.fahrenheit ? "F" : "C"})</ControlLabel>
                                 <FormControl
                                     type="number"
-                                    min={-99}
-                                    max={99}
+                                    min={convertForDisplay(-99)}
+                                    max={convertForDisplay(99)}
                                     step={0.1}
                                     value={this.state.alertTemperature}
                                     onChange={e => this.onTempChange(e)} />

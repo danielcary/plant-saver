@@ -1,22 +1,16 @@
+/*
+ * Plant Saver
+ * PlantBox.jsx
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
 import * as React from 'react';
 import { Panel, Glyphicon, Grid, Row, Col, Image } from 'react-bootstrap';
 
-export interface IPlantBoxProps {
-    plantId: number;
-    imageUrl: string;
-    minTempF: number;
-    currentTempF: number;
-    name: string;
-    fahrenheit: boolean;
-
-    onEdit: (id) => void;
-    onRemove: () => void;
-};
-
-export default class PlantBox extends React.Component<IPlantBoxProps, {}> {
+export default class PlantBox extends React.Component {
 
     removeClicked() {
-        if(confirm(`Are you sure you want to delete '${this.props.name}'?`)) {
+        if (confirm(`Are you sure you want to delete '${this.props.name}'?`)) {
             this.props.onRemove();
         }
     }
@@ -47,7 +41,7 @@ export default class PlantBox extends React.Component<IPlantBoxProps, {}> {
                                 <h4>{this.props.name}</h4>
                             </Col>
                             <Col style={{ paddingRight: 0, paddingLeft: 0 }} xs={3}>
-                                <h3 style={{ marginTop: 10, textAlign: "right" }}>{this.props.minTempF}°</h3>
+                                <h3 style={{ marginTop: 10, textAlign: "right" }}>{this.props.temp}°{this.props.degree}</h3>
                             </Col>
                         </Row>
                     </Grid>

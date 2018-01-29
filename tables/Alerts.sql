@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[Alerts]
+(
+	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
+    [UserId] INT NOT NULL, 
+    [Message] NVARCHAR(200) NOT NULL, 
+    [DateAdded] DATETIME NOT NULL DEFAULT GETUTCDATE()
+)

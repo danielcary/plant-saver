@@ -1,28 +1,70 @@
+/*
+ * Plant Saver
+ * server.js
+ * Copyright 2018 Daniel Cary
+ * Licensed under MIT (https://github.com/danielcary/plant-saver/blob/master/LICENSE)
+*/
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
 const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
+const ocsp = require('ocsp');
+require('dotenv').config({ path: "server.env" });
 
-const apiRouter = require('./api');
-
+// create express app
 const app = express();
 
-// middleware to parse request info into JSON
-app.use(bodyParser.urlencoded({ extended: false })); // application/x-www-form-urlencoded
-app.use(bodyParser.json()); // application/json
+// force https
+app.use((req, res, next) => {
+    if (req.secure) {
+        next()
+    } else {
+        res.redirect('https://' + req.hostname + req.url);
+    }
+});
 
-// serve static files in public folder
-app.use(express.static(path.join(__dirname, "../", "public")));
+// apply routes
+require('./serverroutes')(app);
 
-// route our api requests
-app.use('/api', apiRouter);
+// credentials for the https server
+const credentials = {
+    key: fs.readFileSync(process.env.SSL_SERVER_KEY_PATH, 'utf8'),
+    cert: fs.readFileSync(process.env.SSL_SERVER_CERT_PATH, 'utf8')
+};
 
+// start both servers
+http.createServer(app).listen(80);
+let httpsServer = https.createServer(credentials, app);
 
-// instead of 404, redirect to index page
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, "../", "public", "index.html"));
+let ocspCache = new ocsp.Cache();
+
+httpsServer.on('OCSPRequest', (cert, issuer, cb) => {
+    ocsp.getOCSPURI(cert, (err, uri) => {
+        if (err) {
+            return cb(err);
+        }
+        if (uri === null) {
+            return cb();
+        }
+
+        var req = ocsp.request.generate(cert, issuer);
+        ocspCache.probe(req.id, (err, cached) => {
+            if (err) {
+                return cb(err);
+            }
+            if (cached !== false) {
+                return cb(null, cached.response);
+            }
+
+            var options = {
+                url: uri,
+                ocsp: req.data
+            };
+
+            ocspCache.request(req.id, options, cb);
+        });
+    });
 });
 
 
-app.listen(3000, () => {
-    console.log('listening');
-});
+httpsServer.listen(443);

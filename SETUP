@@ -1,0 +1,31 @@
+Plant Saver expects two .env files in the root project directory:
+
+# server.env
+DARK_SKY_KEY=key
+SEND_GRID_KEY=key
+GOOGLE_OAUTH_AUD=id
+DBCONN_SERVER=address
+DBCONN_DATABASE=db
+DBCONN_USER=user
+DBCONN_PASSWORD=password
+SSL_SERVER_KEY_PATH=path
+SSL_SERVER_CERT_PATH=path
+
+
+# app.env
+GOOGLE_OAUTH_AUD=id
+GOOGLE_MAPS_KEY=key
+
+
+7 Images are expected to be in the public/images:
+
+# graphics of plants used by PlantBox.jsx
+plant1.png
+plant2.png
+plant3.png
+plant4.png
+
+# can be obtained from google
+btn_google_signin_dark_normal_web.png  
+btn_google_signin_dark_focus_web.png
+btn_google_signin_dark_pressed_web.png
