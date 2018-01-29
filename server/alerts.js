@@ -6,7 +6,7 @@
 */
 const CronJob = require('cron').CronJob;
 const winston = require('winston');
-const createAlerts = require('./alerts/createAlerts');
+const createAlerts = require('./alerts/createalerts');
 const clearAlerts = require('./alerts/clearalerts');
 
 
