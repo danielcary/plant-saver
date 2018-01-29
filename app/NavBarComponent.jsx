@@ -47,8 +47,8 @@ export default class NavBarComponent extends React.Component {
                     <NavItem>About</NavItem>
                 </LinkContainer>
                 {this.props.signingUp &&
-                    <LinkContainer to="/signup">
-                        <NavItem onClick={this.props.logout}>Switch Google Accountsp</NavItem>
+                    <LinkContainer to="/login">
+                        <NavItem onClick={this.props.logout}>Switch Google Account</NavItem>
                     </LinkContainer>
                 }
             </Nav>
